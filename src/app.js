@@ -1,8 +1,10 @@
 const express = require('express')
-const siteController = require('./controllers/site')
+const siteController = require('./controllers/siteController')
 const connectDB = require('./config/db')
 const dotenv = require('dotenv')
-const userRoute = require('./routes/userRoute')
+const user = require('./routes/user')
+const site = require('./routes/site')
+const path = require('path')
 
 const app = express()
 
@@ -13,13 +15,14 @@ app.use(
     })
 )
 app.use(express.json())
+app.use(express.static(path.join(__dirname, 'public')))
 
 //config
 dotenv.config()
 
 //route
-app.use('/api/user', userRoute)
-app.get('/home', siteController.home)
+app.use('/api/user', user)
+app.use(site)
 
 //listening
 const PORT = process.env.PORT || 3000

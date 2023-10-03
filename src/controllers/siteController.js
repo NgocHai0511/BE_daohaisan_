@@ -1,6 +1,5 @@
 const home = (req, res, next) => {
-    console.log('hello home')
-    res.send('hello home')
+    res.sendFile(__dirname + '/../public/home.html')
 }
 
 module.exports = {

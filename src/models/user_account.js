@@ -16,11 +16,4 @@ const us_ac_Schema = new mongoose.Schema({
     },
 })
 
-// us_ac_Schema.plugin(autoIncrement.plugin, {
-//     model: 'User',
-//     field: 'user_id',
-//     startAt: 1,
-//     incrementBy: 1,
-// })
-
 module.exports = mongoose.model('User_account', us_ac_Schema)
