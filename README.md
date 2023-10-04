@@ -1,3 +1,5 @@
+# API domain server: https://daohaisan.onrender.com
+
 ## API Đăng Ký Tài Khoản (dnh)
 
 ### Endpoint
@@ -20,11 +22,11 @@
 
 #### Thân yêu cầu (Request Body)
 
--   `account` (String, bắt buộc): Tên tài khoản.
--   `password` (String, bắt buộc): Mật khẩu.
+-   `account` (String, bắt buộc, unique): Tên tài khoản.
+-   `password` (String, bắt buộc): Mật khẩu. >= 6 kí tự
 -   `full_name` (String, bắt buộc): Tên đầy đủ.
--   `email` (String, bắt buộc): Địa chỉ email.
--   `phone` (Number): Số điện thoại.
+-   `email` (String, bắt buộc, unique): Địa chỉ email.
+-   `phone` (Number, unique): Số điện thoại. 
 -   `gender` (String): Giới tính.
 -   `address` (String): Địa chỉ.
 
