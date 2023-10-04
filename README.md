@@ -26,3 +26,37 @@
 ### Kết quả thất bại
 
 -   **Response 500 - Internal Server Error**: `{ "message": "Account creation failed", "error": { "message": "E11000 duplicate key error collection: mydb.accounts index: account_1 dup key: { account: \"nguyenvanA\" }", "name": "MongoError", "code": 11000, "keyPattern": { "account": 1 }, "keyValue": { "account": "nguyenvanA" } } }`
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+# API Đăng nhập Tài Khoản
+
+**Endpoint**: `/api/user/login`
+
+**Phương thức**: POST
+
+**Mô tả**: Đăng nhập tài khoản.
+
+### Yêu cầu
+
+-   **Header**: `Content-Type: application/json`
+
+-   **Thân yêu cầu (Request Body)**:
+    -   `account` (String, bắt buộc): Tên tài khoản.
+    -   `password` (String, bắt buộc): Mật khẩu.
+
+### Kết quả thành công
+
+-   **Response 201 - OK**: `{
+                                "success": true,
+                                "message": "đăng nhập thành công!",
+                                "id": "651d3c8812d102cb1ae294fe" 
+                            }`
+
+### Kết quả thất bại
+
+-   **Response 500 - Internal Server Error**: `{
+                                                    "success": false,
+                                                    "message": "tài khoản hoặc mật khẩu không đúng!"
+                                                }`
