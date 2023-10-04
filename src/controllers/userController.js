@@ -47,4 +47,38 @@ const signup = (req, res, next) => {
             })
         })
 }
-module.exports = { signup }
+
+const login = async (req, res, next) => {
+    try {
+        let user_infor = await Account.aggregate([
+            {
+                $match: {
+                    account: req.body.account,
+                    password: req.body.password,
+                }            
+            },
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: '_id',
+                    foreignField: 'account_id',
+                    as: 'user'
+                }
+            }]);
+        if (user_infor.length === 1) {
+            res.status(200).json({
+                success: true,
+                message: "đăng nhập thành công!",
+                id: user_infor[0].user[0]._id
+            })
+        } else {
+            res.status(500).json({
+                success: false,
+                message: "tài khoản hoặc mật khẩu không đúng!",
+            })
+        }
+    }catch (error) {
+        console.error('Lỗi: ', error);
+    }
+}
+module.exports = { signup, login }
