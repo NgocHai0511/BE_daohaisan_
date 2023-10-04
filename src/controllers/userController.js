@@ -69,7 +69,8 @@ const login = async (req, res, next) => {
             res.status(200).json({
                 success: true,
                 message: "đăng nhập thành công!",
-                id: user_infor[0].user[0]._id
+                id: user_infor[0].user[0]._id,
+                is_admin: user_infor[0].isAdmin,
             })
         } else {
             res.status(500).json({
