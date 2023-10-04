@@ -52,6 +52,7 @@
                                 "success": true,
                                 "message": "đăng nhập thành công!",
                                 "id": "651d3c8812d102cb1ae294fe" 
+                                "is_admin": false
                             }`
 
 ### Kết quả thất bại
