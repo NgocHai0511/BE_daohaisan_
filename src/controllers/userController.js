@@ -1,30 +1,50 @@
-const User_account = require('../models/user_account')
+const Account = require('../models/Account')
+const User = require('../models/User')
 
-const createUserAccount = async (req, res) => {
-    try {
-        console.log(req.body)
-        const { user_account, user_password, user_role } = req.body
-        const newUserAccount = new User_account({
-            user_account,
-            user_password,
-            user_role,
+const signup = (req, res, next) => {
+    const isAdmin = false
+    const { account, password, full_name, email, phone, gender, address } = req.body
+
+    const newAccount = new Account({ account, password, isAdmin })
+    newAccount
+        .save()
+        .then((new_account) => {
+            const account_id = new_account._id
+            const newUser = new User({
+                account_id,
+                full_name,
+                email,
+                phone,
+                gender,
+                address,
+            })
+            newUser
+                .save()
+                .then((new_user) => {
+                    console.log('success')
+                    res.status(201).json({ message: 'success', data: { new_account, new_user } })
+                })
+                .catch((err) => {
+                    Account.findByIdAndRemove(account_id)
+                        .then(() => {
+                            console.log('Cancel Create Account')
+                        })
+                        .catch((removeErr) => {
+                            console.log('Remove Error:', removeErr)
+                        })
+                    console.log(err)
+                    res.status(500).json({
+                        message: 'User creation failed',
+                        error: err,
+                    })
+                })
         })
-        await newUserAccount.save()
-        res.status(201).json(newUserAccount)
-        console.log(req.body)
-    } catch (err) {
-        console.error('Error creating User Account', err)
-        res.status(509).json({ error: 'Unable to create User' })
-    }
+        .catch((err) => {
+            console.log(err)
+            res.status(500).json({
+                message: 'Account creation failed',
+                error: err,
+            })
+        })
 }
-
-const json = (req, res, next) => {
-    // res.status(123).json({ hello: 'dnh' })
-    console.log('hello home')
-    res.status(201).json({ hehe: 'dnh' })
-}
-
-module.exports = {
-    createUserAccount,
-    json,
-}
+module.exports = { signup }

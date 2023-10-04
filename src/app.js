@@ -6,7 +6,9 @@ const user = require('./routes/user')
 const site = require('./routes/site')
 const path = require('path')
 
+//config + setup
 const app = express()
+dotenv.config()
 
 //middleware
 app.use(
@@ -16,9 +18,6 @@ app.use(
 )
 app.use(express.json())
 app.use(express.static(path.join(__dirname, 'public')))
-
-//config
-dotenv.config()
 
 //route
 app.use('/api/user', user)
