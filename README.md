@@ -1,26 +1,28 @@
-//API
-domain: https://daohaisan.onrender.com/ \* Sign Up
-Endpoint: /api/user/signup
-Phương thức: POST
-Mô tả: Đăng ký một tài khoản mới.
-Thông tin yêu cầu:
-Header:
-Content-Type: application/json
-Thân yêu cầu (Request Body):
-account (String, bắt buộc, unique): Tên tài khoản.
-password (String, bắt buộc): Mật khẩu.
-full_name (String, bắt buộc): Tên đầy đủ.
-email (String, bắt buộc, unique): Địa chỉ email.
-phone (Number,unique): Số điện thoại.
-gender (String): Giới tính.
-address (String): Địa chỉ.
+# API Đăng Ký Tài Khoản
 
-        Kết quả thành công (Response 201 - Created):
-        message (String): "success".
-        data (Object): Chứa thông tin tài khoản mới và người dùng mới.
-        new_account (Object): Thông tin tài khoản mới.
-        new_user (Object): Thông tin người dùng mới.
+**Endpoint**: `/api/user/signup`
 
-        Kết quả thất bại (Response 500 - Internal Server Error):
-        message (String): "Account creation failed" hoặc "User creation failed".
-        error (Object): Thông tin về lỗi.
+**Phương thức**: POST
+
+**Mô tả**: Đăng ký một tài khoản mới.
+
+### Yêu cầu
+
+-   **Header**: `Content-Type: application/json`
+
+-   **Thân yêu cầu (Request Body)**:
+    -   `account` (String, bắt buộc): Tên tài khoản.
+    -   `password` (String, bắt buộc): Mật khẩu.
+    -   `full_name` (String, bắt buộc): Tên đầy đủ.
+    -   `email` (String, bắt buộc): Địa chỉ email.
+    -   `phone` (Number): Số điện thoại.
+    -   `gender` (String): Giới tính.
+    -   `address` (String): Địa chỉ.
+
+### Kết quả thành công
+
+-   **Response 201 - Created**: `{ "message": "success", "data": { "new_account": { "_id": "5fba4e7a8d61c732c0cf8e5a", "account": "nguyenvanA", "isAdmin": false }, "new_user": { "_id": "5fba4e7a8d61c732c0cf8e5b", "account_id": "5fba4e7a8d61c732c0cf8e5a", "full_name": "Nguyen Van A", "email": "nguyenvana@example.com" } } }`
+
+### Kết quả thất bại
+
+-   **Response 500 - Internal Server Error**: `{ "message": "Account creation failed", "error": { "message": "E11000 duplicate key error collection: mydb.accounts index: account_1 dup key: { account: \"nguyenvanA\" }", "name": "MongoError", "code": 11000, "keyPattern": { "account": 1 }, "keyValue": { "account": "nguyenvanA" } } }`
