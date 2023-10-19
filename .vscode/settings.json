@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/060f31a7-8390-4e23-9104-236b779610ff/resourceGroups/resource_gr_01/providers/Microsoft.Web/sites/daohaisan",
+    "appService.deploySubpath": "."
+}
