@@ -1,7 +1,5 @@
 # API domain server: https://daohaisan.azurewebsites.net
 
-update 2
-
 ## API Đăng Ký Tài Khoản (dnh)
 
 ### Endpoint
@@ -104,11 +102,11 @@ update 2
 ### Kết quả thành công
 
 -   **Response 201 - OK**: `{
-                    "success": true,
-                    "message": "đăng nhập thành công!",
-                    "id": "651d3c8812d102cb1ae294fe" 
-                    "is_admin": false
-                }`
+                "success": true,
+                "message": "đăng nhập thành công!",
+                "id": "651d3c8812d102cb1ae294fe" 
+                "is_admin": false
+            }`
 
 #### Response 201 - OK
 
