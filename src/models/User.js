@@ -1,34 +1,39 @@
 const mongoose = require('mongoose')
-const Schema = new mongoose.Schema({
-    account_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-        unique: true,
-    },
-    full_name: {
-        type: String,
-        required: true,
-    },
-    email: {
-        type: String,
-        required: true,
-        unique: true,
-        validate: {
-            validator: validateEmail,
-            message: 'Email không hợp lệ.',
+const Schema = new mongoose.Schema(
+    {
+        account_id: {
+            type: mongoose.Schema.Types.ObjectId,
+            required: true,
+            unique: true,
+        },
+        full_name: {
+            type: String,
+            required: true,
+        },
+        email: {
+            type: String,
+            required: true,
+            unique: true,
+            validate: {
+                validator: validateEmail,
+                message: 'Email không hợp lệ.',
+            },
+        },
+        phone: {
+            type: Number,
+            unique: true,
+        },
+        gender: {
+            type: String,
+        },
+        address: {
+            type: String,
         },
     },
-    phone: {
-        type: Number,
-        unique: true,
-    },
-    gender: {
-        type: String,
-    },
-    address: {
-        type: String,
-    },
-})
+    {
+        timestamps: true,
+    }
+)
 
 // Hàm kiểm tra định dạng email
 function validateEmail(email) {
