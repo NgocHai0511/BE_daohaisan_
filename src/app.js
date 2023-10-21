@@ -22,7 +22,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 //route
 app.use('/api/user', user)
-app.use('/api/product', product)
+app.use('/api', product)
 app.use(site)
 
 //listening

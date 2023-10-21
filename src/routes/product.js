@@ -2,10 +2,22 @@ const express = require('express')
 const router = express.Router()
 const productController = require('../controllers/productController')
 
-// *** /api/user/signup
-router.get('/getallproducts', productController.getAllProducts)
-router.get('/getproduct/:searchstring', productController.getProduct)
-router.put('/updateproduct/', productController.updateProduct)
-router.post('/createproduct', productController.createProduct)
-router.delete('/deleteproduct/:id', productController.deleteProduct)
+//GET --- api/user/products
+router.get('/products', productController.getAllProducts)
+
+//GET -- api/user/products/:searchstring
+router.get('/products/:searchstring', productController.getProduct)
+
+//POST -- api/user/product
+router.post('/product', productController.createProduct)
+
+//PUT --api/user/product
+router.put('/product/', productController.updateProduct)
+
+//POST --api/user/product
+router.post('/product', productController.createProduct)
+
+//DELETE --api/user/product
+router.delete('/product/:id', productController.deleteProduct)
+
 module.exports = router
