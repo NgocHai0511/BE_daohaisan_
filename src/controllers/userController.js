@@ -79,7 +79,9 @@ const login = async (req, res, next) => {
             })
         }
     }catch (error) {
-        console.error('Lỗi: ', error);
+        res.status(402).json({
+            err: error,
+        })
     }
 }
 module.exports = { signup, login }
