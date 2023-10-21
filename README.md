@@ -128,3 +128,87 @@
     "message": "tài khoản hoặc mật khẩu không đúng!"
 }
 ```
+
+## API Lấy Tất Cả Sản Phẩm (ntn_product)
+
+### Endpoint
+
+-   `/api/product/getallproducts`
+
+### Phương thức
+
+-   GET
+
+### Mô tả
+
+Lấy tất cả sản phẩm.
+
+### Kết quả thành công
+
+-   **Response 200 - OK**: `{
+                                "success": true,
+                                "allProducts": [
+                                    {
+                                        "_id": "65337df5fc0a47cae4ee3d29",
+                                        "id": "SP0001",
+                                        "name": "Cá pasa",
+                                        "category": "Hải sản đông lạnh",
+                                        "description": "Cá pasa cực béo, bổ dưỡng. Được đánh bắt từ Himalia",
+                                        "imageUrl": "will update,not yet",
+                                        "weight": "500g",
+                                        "price": "500,000đ",
+                                        "available": "6",
+                                        "createdAt": "2023-10-21T07:29:57.593Z",
+                                        "updatedAt": "2023-10-21T07:36:03.496Z",
+                                        "__v": 0
+                                        },
+                                        {
+                                        "_id": "6533810233a3d0d4bdb83e27",
+                                        "id": "SP0002",
+                                        "name": "Ốc ngón tay",
+                                        "category": "Hải sản tươi sống",
+                                        "description": "Thơm ngon, tươi sạch. Được đánh bắt từ Himalia",
+                                        "imageUrl": "will update,not yet",
+                                        "weight": "500g",
+                                        "price": "300,000đ",
+                                        "available": "5",
+                                        "createdAt": "2023-10-21T07:42:58.190Z",
+                                        "updatedAt": "2023-10-21T07:42:58.190Z",
+                                        "__v": 0
+                                        },
+                                        {
+                                        "_id": "6533818c33a3d0d4bdb83e2d",
+                                        "id": "SP0004",
+                                        "name": "Hàu tươi cực to",
+                                        "category": "Hải sản tươi sống",
+                                        "description": "Thơm ngon, tươi sạch. Được đánh bắt từ Himalia",
+                                        "imageUrl": "will update,not yet",
+                                        "weight": "500g",
+                                        "price": "650,000đ",
+                                        "available": "7",
+                                        "createdAt": "2023-10-21T07:45:16.889Z",
+                                        "updatedAt": "2023-10-21T07:59:51.092Z",
+                                        "__v": 0
+                                    }
+                                ]
+                            }`
+
+### Kết quả thất bại
+
+#### Response 404 - Not Found
+
+```json
+{
+    "success": false,
+    "message": "Lỗi: Không thể lấy sản phẩm!"
+}
+```
+
+#### Response 500 - Internal Server Error
+
+```json
+{
+    "success": false,
+    "message": "err.message",
+}
+```
