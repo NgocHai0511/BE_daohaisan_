@@ -2,6 +2,7 @@ const express = require('express')
 const connectDB = require('./config/db')
 const dotenv = require('dotenv')
 const product = require('./routes/product')
+const user = require('./routes/user')
 const site = require('./routes/site')
 const path = require('path')
 
@@ -20,6 +21,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 //route
 app.use('/api', product)
+app.use('/api', user)
 app.use(site)
 
 //listening
