@@ -16,6 +16,19 @@ const getAllUser = (req, res) => {
         .catch((err) => res.status(500).json({ err: err }))
 }
 
+const getAllCustomer = (req, res) => {
+    User.find({ isAdmin: false })
+        .then((users) => {
+            res.status(200).json({
+                message: 'Fetched Successfully!',
+                data: {
+                    customers: users,
+                },
+            })
+        })
+        .catch((err) => res.status(500).json({ err: err }))
+}
+
 const createUser = async (req, res, next) => {
     const { fullname, email, password, phone, avatarUrl, gender, address } = req.body
     const id = await auto_create_id_user()
@@ -192,4 +205,5 @@ module.exports = {
     updateUser,
     removeProductFromCart,
     getCart,
+    getAllCustomer,
 }

@@ -3,6 +3,8 @@ const userController = require('../controllers/userController')
 
 //[GET] api/users
 router.get('/users', userController.getAllUser)
+//[GET] api/customers
+router.get('/customers', userController.getAllCustomer)
 //[GET] api/user/:id
 router.get('/user/:id', userController.getUser)
 //[POST] api/user/
