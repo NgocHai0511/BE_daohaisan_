@@ -1,27 +1,31 @@
 const mongoose = require('mongoose')
-const Schema = new mongoose.Schema(
+
+const userSchema = new mongoose.Schema(
     {
-        account_id: {
-            type: mongoose.Schema.Types.ObjectId,
+        id: {
+            type: String,
             required: true,
             unique: true,
         },
-        full_name: {
+        fullname: {
             type: String,
-            required: true,
         },
         email: {
             type: String,
             required: true,
             unique: true,
-            validate: {
-                validator: validateEmail,
-                message: 'Email không hợp lệ.',
-            },
+        },
+        password: {
+            type: String,
+            require: true,
         },
         phone: {
-            type: Number,
+            type: String,
+            required: true,
             unique: true,
+        },
+        avatarUrl: {
+            type: String,
         },
         gender: {
             type: String,
@@ -29,18 +33,29 @@ const Schema = new mongoose.Schema(
         address: {
             type: String,
         },
+        cart: {
+            items: [
+                {
+                    productId: {
+                        type: String,
+                        ref: 'Product',
+                        required: true,
+                    },
+                    quantity: {
+                        type: Number,
+                        required: true,
+                    },
+                },
+            ],
+        },
+        isAdmin: {
+            type: Boolean,
+            default: false,
+        },
     },
     {
         timestamps: true,
     }
 )
 
-// Hàm kiểm tra định dạng email
-function validateEmail(email) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    return emailRegex.test(email)
-}
-
-const User = mongoose.model('User', Schema)
-
-module.exports = User
+module.exports = mongoose.model('User', userSchema)

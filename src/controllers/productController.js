@@ -1,4 +1,4 @@
-const { auto_create_id_product } = require('../autocreateid/autoCreateId.js')
+const { auto_create_id_product } = require('../config/generateId.js')
 const Product = require('../models/Product.js')
 
 const getAllProducts = async (req, res, nexr) => {
@@ -61,7 +61,7 @@ const createProduct = async (req, res, next) => {
     }
 }
 
-const getProduct = async (req, res, next) => {
+const searchProducts = async (req, res, next) => {
     try {
         let searchString = req.params.searchstring
         let product = await Product.find({
@@ -79,7 +79,7 @@ const getProduct = async (req, res, next) => {
         })
 
         if (product.length == 0) {
-            res.status('200').json({
+            res.status(200).json({
                 message: 'Không tìm thấy sản phẩm nào phù hợp',
                 data: {
                     products: [],
@@ -102,6 +102,39 @@ const getProduct = async (req, res, next) => {
             },
         })
     }
+}
+
+const getSingleProduct = (req, res, next) => {
+    const id = req.params.id
+    if (id === undefined || id === '') {
+        const error = new Error('Invalid Id!')
+        error.statusCode = 400
+        throw error
+    }
+
+    Product.findOne({ id: id })
+        .then((product) => {
+            if (!product) {
+                const error = new Error('Không có sản phẩm phù hợp với Id')
+                error.statusCode = 404
+                throw error
+            }
+            res.status(200).json({
+                message: 'Successful!',
+                data: {
+                    productInfo: product,
+                },
+            })
+        })
+        .catch((err) => {
+            if (!err.statusCode) {
+                err.statusCode = 500
+            }
+            res.status(err.statusCode).json({
+                message: 'Có lỗi xảy ra',
+                data: { error: err },
+            })
+        })
 }
 
 const updateProduct = async (req, res, next) => {
@@ -160,4 +193,11 @@ const deleteProduct = async (req, res, next) => {
     }
 }
 
-module.exports = { getAllProducts, getProduct, createProduct, updateProduct, deleteProduct }
+module.exports = {
+    getAllProducts,
+    getSingleProduct,
+    createProduct,
+    updateProduct,
+    deleteProduct,
+    searchProducts,
+}

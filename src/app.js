@@ -1,10 +1,11 @@
 const express = require('express')
-const siteController = require('./controllers/siteController')
 const connectDB = require('./config/db')
 const dotenv = require('dotenv')
-const user = require('./routes/user')
+const cors = require('cors')
 const product = require('./routes/product')
+const user = require('./routes/user')
 const site = require('./routes/site')
+const admin = require('./routes/admin')
 const path = require('path')
 
 //config + setup
@@ -12,6 +13,7 @@ const app = express()
 dotenv.config()
 
 //middleware
+app.use(cors())
 app.use(
     express.urlencoded({
         extended: true,
@@ -21,8 +23,9 @@ app.use(express.json())
 app.use(express.static(path.join(__dirname, 'public')))
 
 //route
-app.use('/api/user', user)
 app.use('/api', product)
+app.use('/api', user)
+app.use('/api', admin)
 app.use(site)
 
 //listening

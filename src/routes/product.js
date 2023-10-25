@@ -6,7 +6,10 @@ const productController = require('../controllers/productController')
 router.get('/products', productController.getAllProducts)
 
 //GET -- api/user/products/:searchstring
-router.get('/products/:searchstring', productController.getProduct)
+router.get('/products/:searchstring', productController.searchProducts)
+
+//GET --- api/user/product/:id
+router.get('/product/:id', productController.getSingleProduct)
 
 //POST -- api/user/product
 router.post('/product', productController.createProduct)
