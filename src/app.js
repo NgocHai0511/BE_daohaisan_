@@ -24,8 +24,8 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 //route
 app.use('/api', product)
-app.use('/api', user)
-app.use('/api', admin)
+app.use('/api/', user)
+app.use('/api/admin', admin)
 app.use(site)
 
 //listening

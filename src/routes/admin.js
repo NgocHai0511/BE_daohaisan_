@@ -1,25 +1,19 @@
 const router = require('express').Router()
 const productController = require('../controllers/productController')
 
-//GET --- api/user/products
+//GET --- api/admin/products
 router.get('/products', productController.getAllProducts)
-
-//GET -- api/user/products/:searchstring
+//GET -- api/admin/products/:searchstring
 router.get('/products/:searchstring', productController.searchProducts)
-
-//GET --- api/user/product/:id
+//GET --- api/admin/product/:id
 router.get('/product/:id', productController.getSingleProduct)
-
-//POST -- api/user/product
+//POST -- api/admin/product
 router.post('/product', productController.createProduct)
-
-//PUT --api/user/product
+//PUT --api/admin/product
 router.put('/product/', productController.updateProduct)
-
-//POST --api/user/product
+//POST --api/admin/product
 router.post('/product', productController.createProduct)
-
-//DELETE --api/user/product
+//DELETE --api/admin/product
 router.delete('/product/:id', productController.deleteProduct)
 
 module.exports = router
