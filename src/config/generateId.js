@@ -1,3 +1,4 @@
+const Order = require('../models/Order.js')
 const Product = require('../models/Product.js')
 const User = require('../models/User.js')
 
@@ -51,5 +52,17 @@ let auto_create_id_user = async () => {
 
     return `KH${newId.toString().padStart(4, '0')}`
 }
+let auto_create_id_order = async () => {
+    const latestOrder = await Order.findOne().sort({ id: -1 }).exec()
 
-module.exports = { auto_create_id_product, auto_create_id_user }
+    if (!latestOrder) {
+        return 'DH0001'
+    }
+
+    const oldId = parseInt(latestOrder.id.slice(2), 10)
+    const newId = oldId + 1
+
+    return `DH${newId.toString().padStart(4, '0')}`
+}
+
+module.exports = { auto_create_id_product, auto_create_id_user, auto_create_id_order }

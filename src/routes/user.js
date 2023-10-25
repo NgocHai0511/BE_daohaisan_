@@ -1,5 +1,6 @@
 const router = require('express').Router()
 const userController = require('../controllers/userController')
+const orderController = require('../controllers/orderController')
 
 //[GET] api/users
 router.get('/users', userController.getAllUser)
@@ -14,10 +15,16 @@ router.put('/user', userController.updateUser)
 
 //[GET] api/user/cart/:id
 router.get('/user/cart/:id', userController.getCart)
-
 //[POST] api/user/addCartItem
 router.post('/user/addCartItem', userController.addProductToCart)
 //[PUT] api/user/removeCartItem
 router.put('/user/removeCartItem', userController.removeProductFromCart)
+
+//[GET] api/order
+router.get('/orders', orderController.getAllOrder)
+//[GET] api/order:userId
+router.get('/orders/:userId', orderController.getOrderByUserId)
+//[POST] api/order
+router.post('/order', orderController.createOrder)
 
 module.exports = router

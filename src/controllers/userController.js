@@ -1,4 +1,3 @@
-const { response } = require('express')
 const { auto_create_id_user } = require('../config/generateId')
 const Product = require('../models/Product')
 const User = require('../models/User')
