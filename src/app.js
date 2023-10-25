@@ -1,8 +1,6 @@
 const express = require('express')
-const siteController = require('./controllers/siteController')
 const connectDB = require('./config/db')
 const dotenv = require('dotenv')
-const user = require('./routes/user')
 const product = require('./routes/product')
 const site = require('./routes/site')
 const path = require('path')
@@ -21,7 +19,6 @@ app.use(express.json())
 app.use(express.static(path.join(__dirname, 'public')))
 
 //route
-app.use('/api/user', user)
 app.use('/api', product)
 app.use(site)
 
