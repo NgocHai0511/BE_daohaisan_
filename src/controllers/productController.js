@@ -28,8 +28,8 @@ const getAllProducts = async (req, res, nexr) => {
 
 const createProduct = async (req, res, next) => {
     try {
-        debugger;
-        let { name, category, description, imgeUrl, weight, price, available } = req.body;
+        debugger
+        let { name, category, description, weight, price, available } = req.body
         let idOfNewProduct = await auto_create_id_product()
         let newProduct = await Product.create({
             id: idOfNewProduct,
@@ -145,7 +145,15 @@ const updateProduct = async (req, res, next) => {
 
         let newUpdateProduct = await Product.findOneAndUpdate(
             { id },
-            { name, category, description, imageUrl: await urlFromFireBase(req.file), weight, price, available },
+            {
+                name,
+                category,
+                description,
+                imageUrl: await urlFromFireBase(req.file),
+                weight,
+                price,
+                available,
+            },
             { new: true }
         )
 
