@@ -1,5 +1,6 @@
 const { auto_create_id_product } = require('../config/generateId.js')
 const Product = require('../models/Product.js')
+const { urlFromFireBase } = require('../config/setupfirebase.js')
 
 const getAllProducts = async (req, res, nexr) => {
     try {
@@ -27,14 +28,15 @@ const getAllProducts = async (req, res, nexr) => {
 
 const createProduct = async (req, res, next) => {
     try {
-        let { name, category, description, imgeUrl, weight, price, available } = req.body
+        debugger;
+        let { name, category, description, imgeUrl, weight, price, available } = req.body;
         let idOfNewProduct = await auto_create_id_product()
         let newProduct = await Product.create({
             id: idOfNewProduct,
             name: name,
             category: category,
             description: description,
-            imgeUrl: imgeUrl,
+            imageUrl: await urlFromFireBase(req.file),
             weight: weight,
             price: price,
             available: available,
@@ -143,7 +145,7 @@ const updateProduct = async (req, res, next) => {
 
         let newUpdateProduct = await Product.findOneAndUpdate(
             { id },
-            { name, category, description, imageUrl, weight, price, available },
+            { name, category, description, imageUrl: await urlFromFireBase(req.file), weight, price, available },
             { new: true }
         )
 

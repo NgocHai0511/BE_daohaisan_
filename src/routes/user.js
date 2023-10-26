@@ -1,6 +1,7 @@
 const router = require('express').Router()
 const userController = require('../controllers/userController')
 const orderController = require('../controllers/orderController')
+const { upload } = require('../config/setupfirebase')
 
 //[GET] api/users
 router.get('/users', userController.getAllUser)
@@ -9,9 +10,9 @@ router.get('/customers', userController.getAllCustomer)
 //[GET] api/user/:id
 router.get('/user/:id', userController.getUser)
 //[POST] api/user/
-router.post('/user', userController.createUser)
+router.post('/user', upload.single("avatarUrl"), userController.createUser)
 //[PUT] api/user
-router.put('/user', userController.updateUser)
+router.put('/user', upload.single("avatarUrl"), userController.updateUser)
 
 //[GET] api/user/cart/:id
 router.get('/user/cart/:id', userController.getCart)

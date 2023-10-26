@@ -1,6 +1,7 @@
 const { auto_create_id_user } = require('../config/generateId')
 const Product = require('../models/Product')
 const User = require('../models/User')
+const { urlFromFireBase } = require('../config/setupfirebase.js')
 
 const getAllUser = (req, res) => {
     User.find()
@@ -37,7 +38,7 @@ const createUser = async (req, res, next) => {
         email,
         password,
         phone,
-        avatarUrl,
+        avatarUrl: await urlFromFireBase(req.file),
         gender,
         address,
     })
@@ -72,7 +73,7 @@ const updateUser = async (req, res) => {
         user.email = email
         user.password = password
         user.phone = phone
-        user.avatarUrl = avatarUrl
+        user.avatarUrl = await urlFromFireBase(req.file)
         user.gender = gender
         user.address = address
         const newUser = await user.save()
