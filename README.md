@@ -132,17 +132,18 @@ Ví dụ dữ liệu form data:
 
 Các trường fullname,email,password,phone là bắt buộc.
 Các trường email,phone là duy nhất
+
 ```json
 {
-"fullname": "admin",
-"email": "admin@gmail.com",
-"password": "admin",
-"phone": "055113",
+    "fullname": "admin",
+    "email": "admin@gmail.com",
+    "password": "admin",
+    "phone": "055113",
 
-        "gender": "123",
-        "address": "123"
-    }
-    ```
+    "gender": "123",
+    "address": "123"
+}
+```
 
 ### 9. Cập nhật thông tin một User
 
