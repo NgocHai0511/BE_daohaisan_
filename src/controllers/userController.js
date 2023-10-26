@@ -30,24 +30,28 @@ const getAllCustomer = (req, res) => {
 }
 
 const createUser = async (req, res, next) => {
-    const { fullname, email, password, phone, avatarUrl, gender, address } = req.body
-    const id = await auto_create_id_user()
-    const user = new User({
-        id,
-        fullname,
-        email,
-        password,
-        phone,
-        avatarUrl: await urlFromFireBase(req.file),
-        gender,
-        address,
-    })
-
-    user.save()
-        .then((user) => {
-            res.status(200).json({ message: 'Create Successfully', data: { newUser: user } })
+    try {
+        const { fullname, email, password, phone, gender, address } = req.body
+        const id = await auto_create_id_user()
+        const user = new User({
+            id,
+            fullname,
+            email,
+            password,
+            phone,
+            gender,
+            address,
         })
-        .catch((err) => res.status(500).json({ message: 'Có lỗi xảy ra', err: err }))
+
+        user.save()
+            .then((user) => {
+                res.status(200).json({ message: 'Create Successfully', data: { newUser: user } })
+            })
+            .catch((err) => res.status(500).json({ message: 'Có lỗi xảy ra', err: err }))
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({ message: 'Có lỗi xảy ra', error: err })
+    }
 }
 
 //get an User

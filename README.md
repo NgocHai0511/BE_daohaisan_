@@ -1,6 +1,6 @@
 # Thông tin API
 
-URL: `daohaisan.azurewebsites.net/`
+Domain: `daohaisan.azurewebsites.net/`
 
 Đối với các route cần xác thực => Gửi token lên bằng headers với key là `authorization`. Token phải bắt đầu bằng 'Bearer '.
 (Hiện tại chưa cần xác thực)
@@ -13,32 +13,6 @@ Là một object
 interface Response {
     message: string
     data?: any
-}
-```
-
-Ví dụ
-
-```json
-{
-    "message": "Lấy sản phẩm thành công",
-    "data": {
-        "_id": "60afb2c76ef5b902180aacba",
-        "images": [
-            "https://api-ecom.duthanhduoc.com/images/bbea6d3e-e5b1-494f-ab16-02eece816d50.jpg"
-        ],
-        "price": 3190000,
-        "rating": 4.6,
-        "price_before_discount": 3990000,
-        "quantity": 138,
-        "sold": 1200,
-        "view": 696,
-        "name": "Điện Thoại Vsmart Active 3 6GB/64GB - Hàng Chính Hãng",
-        "description": "",
-        "category": "60afafe76ef5b902180aacb5",
-        "image": "https://api-ecom.duthanhduoc.com/images/bbea6d3e-e5b1-494f-ab16-02eece816d50.jpg",
-        "createdAt": "2021-05-27T14:55:03.113Z",
-        "updatedAt": "2021-06-12T14:22:55.871Z"
-    }
 }
 ```
 
@@ -67,185 +41,208 @@ Ví dụ về lỗi
 
 ---
 
-## Lấy Tất Cả Sản Phẩm: `/api/products`
+### 1. Lấy tất cả sản phẩm
 
-**Phương thức:** GET
+-   **Yêu cầu API:** Lấy danh sách tất cả sản phẩm.
+-   **Phương thức:** GET
+-   **ENDPOINT:** `/api/admin/products`
 
-**Response:**
+### 2. Tìm kiếm sản phẩm
 
+-   **Yêu cầu API:** Tìm kiếm sản phẩm theo tên hoặc từ khóa.
+-   **Phương thức:** GET
+-   **ENDPOINT:** `/api/admin/products/sò điệp`
+
+### 3. Thêm sản phẩm mới
+
+-   **Yêu cầu API:** Tạo một sản phẩm mới với thông tin cụ thể.
+-   **Phương thức:** POST
+-   **ENDPOINT:** `/api/product`
+-   **Body:** Dữ liệu sản phẩm dưới dạng Form Data với các trường thông tin sau:
+
+    -   `name` (text): Tên sản phẩm.
+    -   `category` (text): Danh mục sản phẩm.
+    -   `description` (text): Mô tả sản phẩm.
+    -   `weight` (text): Trọng lượng sản phẩm.
+    -   `price` (text): Giá sản phẩm.
+    -   `available` (text): Số lượng có sẵn.
+    -   `imageUrl` (file): Hình ảnh sản phẩm.
+
+Ví dụ dữ liệu form data:
+
+-   `name`: "test 1"
+-   `category`: "hải sản"
+-   `description`: "hải sản"
+-   `weight`: "100g"
+-   `price`: "50000"
+-   `available`: "10"
+-   `imageUrl`: [file image] (Tải lên hình ảnh sản phẩm)
+
+### 4. Cập nhật thông tin sản phẩm
+
+-   **Yêu cầu API:** Cập nhật thông tin của một sản phẩm dựa trên ID.
+-   **Phương thức:** PUT
+-   **ENDPOINT:** `/api/product`
+-   **Body:** Dữ liệu sản phẩm cần cập nhật dưới dạng Form Data với các trường thông tin sau:
+
+    -   `id` (text): Mã sản phẩm cần cập nhật.
+    -   `name` (text): Tên sản phẩm.
+    -   `category` (text): Danh mục sản phẩm.
+    -   `description` (text): Mô tả sản phẩm.
+    -   `weight` (text): Trọng lượng sản phẩm.
+    -   `price` (text): Giá sản phẩm.
+    -   `available` (text): Số lượng có sẵn.
+    -   `imageUrl` (file): Hình ảnh sản phẩm.
+
+Ví dụ dữ liệu form data:
+
+-   `id`: "SP0015"
+-   `name`: "test 1"
+-   `category`: "hải sản"
+-   `description`: "hải sản"
+-   `weight`: "100g"
+-   `price`: "50000"
+-   `available`: "10"
+-   `imageUrl`: [file image] (Tải lên hình ảnh sản phẩm)
+
+### 5. Xóa sản phẩm
+
+-   **Yêu cầu API:** Xóa một sản phẩm dựa trên ID.
+-   **Phương thức:** DELETE
+-   **ENDPOINT:** `/api/product/SP0015`
+
+### 6. Lấy danh sách tất cả User (Bao gồm cả Admin)
+
+-   **Yêu cầu API:** Lấy danh sách tất cả người dùng, bao gồm cả người dùng quản trị (Admin).
+-   **Phương thức:** GET
+-   **ENDPOINT:** `/api/users`
+
+### 7. Lấy danh sách tất cả Khách hàng
+
+-   **Yêu cầu API:** Lấy danh sách tất cả khách hàng.
+-   **Phương thức:** GET
+-   **ENDPOINT:** `/api/customers`
+
+### 8. Tạo mới một User
+
+-   **Yêu cầu API:** Tạo một người dùng mới với thông tin cụ thể.
+-   **Phương thức:** POST
+-   **ENDPOINT:** `/api/user`
+-   **Body:** Dữ liệu người dùng (JSON).
+
+Các trường fullname,email,password,phone là bắt buộc.
+Các trường email,phone là duy nhất
+```json
+{
+"fullname": "admin",
+"email": "admin@gmail.com",
+"password": "admin",
+"phone": "055113",
+
+        "gender": "123",
+        "address": "123"
+    }
+    ```
+
+### 9. Cập nhật thông tin một User
+
+-   **Yêu cầu API:** Cập nhật thông tin của một người dùng dựa trên ID.
+-   **Phương thức:** PUT
+-   **ENDPOINT:** `/api/user`
+-   **Body:** Dữ liệu người dùng cần cập nhật dưới dạng Form Data với các trường thông tin sau:
+
+    -   `userId` (text): ID của người dùng cần cập nhật.
+    -   `fullname` (text): Tên đầy đủ của người dùng.
+    -   `email` (text): Địa chỉ email của người dùng.
+    -   `password` (text): Mật khẩu người dùng.
+    -   `phone` (text): Số điện thoại của người dùng.
+    -   `avatarUrl` (file): Đường dẫn đến hình ảnh avatar của người dùng.
+    -   `gender` (text): Giới tính của người dùng.
+    -   `address` (text): Địa chỉ của người dùng.
+
+    Ví dụ dữ liệu form data:
+
+    -   `userId`: "KH0002"
+    -   `fullname`: "User 2"
+    -   `email`: "user2@gmail.com"
+    -   `password`: "user 4"
+    -   `phone`: "2"
+    -   `avatarUrl`: [file image] (Tải lên hình ảnh avatar)
+    -   `gender`: "123"
+    -   `address`: "123"
+
+### 10. Lấy thông tin giỏ hàng của một User
+
+-   **Yêu cầu API:** Lấy thông tin giỏ hàng của một người dùng dựa trên ID người dùng.
+-   **Phương thức:** GET
+-   **ENDPOINT:** `/api/user/cart/KH0001`
+
+### 11. Thêm 1 sản phẩm vào giỏ hàng của 1 user
+
+-   **Yêu cầu API:** Thêm một sản phẩm vào giỏ hàng của một người dùng.
+-   **Phương thức:** POST
+-   **ENDPOINT:** `/api/user/addCartItem`
+-   **Body:** Dữ liệu sản phẩm và người dùng (JSON).
     ```json
     {
-      "message": "Thành công",
-      "data": {
+        "userId": "KH0002",
+        "productId": "SP0003"
+    }
+    ```
+
+### 12. Xóa 1 sản phẩm ra khỏi giỏ hàng của 1 user
+
+-   **Yêu cầu API:** Xóa một sản phẩm khỏi giỏ hàng của một người dùng dựa trên ID sản phẩm.
+-   **Phương thức:** PUT
+-   **ENDPOINT:** `/api/user/removeCartItem`
+-   **Body:** Dữ liệu sản phẩm và người dùng (JSON).
+    ```json
+    {
+        "userId": "KH0002",
+        "productId": "SP0002"
+    }
+    ```
+
+### 13. Tạo mới một đơn hàng
+
+-   **Yêu cầu API:** Tạo một đơn đặt hàng mới với thông tin cụ thể.
+-   **Phương thức:** POST
+-   **ENDPOINT:** `/api/order`
+-   **Body:** Dữ liệu đơn đặt hàng (JSON).
+    ```json
+    {
+        "userId": "KH0002",
         "products": [
-          {
-            // Chi tiết sản phẩm
-          },
-          {
-            // Chi tiết sản phẩm
-          },
-          // Các sản phẩm khác
-        ]
-      }
-    }
-    ```
-
--   Nếu không có sản phẩm:
-
-    -   Status: 404 Not Found
-    -   Message: "Lỗi: Không thể lấy sản phẩm!"
-
--   Nếu xảy ra lỗi:
-    -   Status: 500 Internal Server Error
-    -   Message: "Có lỗi xảy ra"
-    -   Data: Thông tin về lỗi (error)
-
-## Lấy Sản Phẩm Theo Từ Khóa: `/api/products/:searchstring`
-
-**Phương thức:** GET
-
-**URL Parameter:**
-
--   `searchstring`: Từ khóa tìm kiếm
-
-**Response:**
-
--   Nếu tìm thấy sản phẩm phù hợp:
-
-    ```json
-    {
-        "message": "Tìm thấy [số lượng] sản phẩm phù hợp",
-        "data": {
-            "products": [
-                {
-                    // Chi tiết sản phẩm
-                },
-                {
-                    // Chi tiết sản phẩm
-                }
-                // Các sản phẩm khác
-            ]
-        }
-    }
-    ```
-
--   Nếu không tìm thấy sản phẩm phù hợp:
-
-    ```json
-    {
-        "message": "Không tìm thấy sản phẩm nào phù hợp",
-        "data": {
-            "products": []
-        }
-    }
-    ```
-
--   Nếu xảy ra lỗi:
-    -   Status: 500 Internal Server Error
-    -   Message: "Có lỗi xảy ra"
-    -   Data: Thông tin về lỗi (error)
-
-## Thêm Mới Sản Phẩm: `/api/product`
-
-**Phương thức:** POST
-
-**Request Body:**
-
-```json
-{
-    "name": "Tên sản phẩm",
-    "category": "Danh mục sản phẩm",
-    "description": "Mô tả sản phẩm",
-    "imageUrl": "Đường dẫn hình ảnh",
-    "weight": "Khối lượng sản phẩm",
-    "price": "Giá sản phẩm",
-    "available": "Số lượng có sẵn"
-}
-```
-
-**Response:**
-
--   Nếu sản phẩm được thêm mới:
-
-    ```json
-    {
-        "message": "Thêm sản phẩm thành công",
-        "data": {
-            "newProduct": {
-                // Chi tiết sản phẩm đã thêm
+            {
+                "name": "Cá heo",
+                "imageUrl": "img.jpg",
+                "price": "100000",
+                "quantity": "5"
             }
+        ],
+        "status": "Đang xử lý",
+        "totalPrice": "100000",
+        "paymentInfo": {
+            "method": "MoMo",
+            "status": "Đã thanh toán"
         }
     }
     ```
 
--   Nếu không thể thêm mới sản phẩm:
+### 14. Lấy danh sách tất cả đơn đặt hàng
 
-    -   Status: 500 Internal Server Error
-    -   Message: "Không thể thêm mới. Kiểm tra lại các trường đầu vào!!"
+-   **Yêu cầu API:** Lấy danh sách tất cả đơn đặt hàng.
+-   **Phương thức:** GET
+-   **ENDPOINT:** `/api/orders`
 
--   Nếu xảy ra lỗi:
-    -   Status: 500 Internal Server Error
-    -   Message: "Có lỗi xảy ra"
-    -   Data: Thông tin về lỗi (error)
+### 15. Lấy thông tin đơn hàng của 1 user
 
-## Cập Nhật Sản Phẩm: `/api/product`
+-   **Yêu cầu API:** Lấy danh sách các đơn đặt hàng dựa trên ID người dùng.
+-   **Phương thức:** GET
+-   **ENDPOINT:** `/api/orders/KH0002`
 
-**Phương thức:** PUT
+### 16. Xem thông chi tiết sản phẩm
 
-**Body:**
-
-```json
-{
-    "id": "Mã sản phẩm",
-    "name": "Tên sản phẩm",
-    "category": "Danh mục sản phẩm",
-    "description": "Mô tả sản phẩm",
-    "imageUrl": "URL hình ảnh",
-    "weight": "Khối lượng sản phẩm",
-    "price": "Giá sản phẩm",
-    "available": "Số lượng sản phẩm có sẵn"
-}
-```
-
-**Rules:**
-
--   id: required, mã sản phẩm
--   name: Tên sản phẩm, string
--   category: Danh mục sản phẩm, string
--   description: Mô tả sản phẩm, string
--   imageUrl: URL hình ảnh, string
--   weight: Khối lượng sản phẩm, string
--   price: Giá sản phẩm, number
--   available: Số lượng sản phẩm có sẵn, number
-
-**Response:**
-
--   Nếu sản phẩm không tồn tại:
-
-    -   Status: 404 Not Found
-    -   Message: "Thông tin không hợp lệ. Không thể cập nhật sản phẩm"
-
--   Nếu cập nhật thành công:
-    -   Status: 200 OK
-    -   Message: "Cập nhật thành công"
-    -   Data: Thông tin sản phẩm đã cập nhật (modifiedProduct)
-
-## Xóa Sản Phẩm: `/api/product/:id`
-
-**Phương thức:** DELETE
-
-**Params:**
-
--   `:id`: Mã sản phẩm cần xóa
-
-**Response:**
-
--   Nếu không tìm thấy sản phẩm để xóa:
-
-    -   Status: 404 Not Found
-    -   Message: "Không tìm thấy sản phẩm nào để xóa"
-
--   Nếu xóa thành công:
-    -   Status: 201 Created
-    -   Message: "Đã xóa thành công"
-    -   Data: Thông tin về số sản phẩm đã bị xóa (deletedProduct)
+-   **Yêu cầu API:** Lấy thông tin chi tiết sản phẩm thông qua mã sản phẩm
+-   **Phương thức:** GET
+-   **ENDPOINT:** `/api/admin/products/SP0001`

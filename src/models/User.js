@@ -26,6 +26,7 @@ const userSchema = new mongoose.Schema(
         },
         avatarUrl: {
             type: String,
+            default: 'https://i.stack.imgur.com/l60Hf.png',
         },
         gender: {
             type: String,

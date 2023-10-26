@@ -10,9 +10,9 @@ router.get('/customers', userController.getAllCustomer)
 //[GET] api/user/:id
 router.get('/user/:id', userController.getUser)
 //[POST] api/user/
-router.post('/user', upload.single("avatarUrl"), userController.createUser)
+router.post('/user', userController.createUser)
 //[PUT] api/user
-router.put('/user', upload.single("avatarUrl"), userController.updateUser)
+router.put('/user', upload.single('avatarUrl'), userController.updateUser)
 
 //[GET] api/user/cart/:id
 router.get('/user/cart/:id', userController.getCart)
