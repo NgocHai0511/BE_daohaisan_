@@ -145,7 +145,7 @@ const updateProduct = async (req, res, next) => {
 
         if (req.file) {
             console.log('Có ảnh tải lên')
-            await urlFromFireBase(req.file)
+            imageUrl = await urlFromFireBase(req.file)
         }
 
         let newUpdateProduct = await Product.findOneAndUpdate(
