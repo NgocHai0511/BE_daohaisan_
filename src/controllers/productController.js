@@ -143,13 +143,18 @@ const updateProduct = async (req, res, next) => {
     try {
         let { id, name, category, description, imageUrl, weight, price, available } = req.body
 
+        if (req.file) {
+            console.log('Có ảnh tải lên')
+            await urlFromFireBase(req.file)
+        }
+
         let newUpdateProduct = await Product.findOneAndUpdate(
             { id },
             {
                 name,
                 category,
                 description,
-                imageUrl: await urlFromFireBase(req.file),
+                imageUrl: imageUrl,
                 weight,
                 price,
                 available,
