@@ -28,31 +28,44 @@ const getAllProducts = async (req, res, nexr) => {
 
 const createProduct = async (req, res, next) => {
     try {
-        debugger
-        let { name, category, description, weight, price, available } = req.body
-        let idOfNewProduct = await auto_create_id_product()
-        let newProduct = await Product.create({
-            id: idOfNewProduct,
-            name: name,
-            category: category,
-            description: description,
-            imageUrl: await urlFromFireBase(req.file),
-            weight: weight,
-            price: price,
-            available: available,
-        })
-        debugger
-        if (!newProduct) {
-            res.status(500).json({
-                message: 'Không thể thêm mới. Kiểm tra lại các trường đầu vào!!',
+        const { name, category, description, weight, price, available } = req.body
+        const idOfNewProduct = await auto_create_id_product()
+        if (!req.file) {
+            return res.status(404).json({
+                message: 'Không tìm thấy hình ảnh sản phẩm. Kiểm tra lại input file!',
             })
-        } else
-            res.status(201).json({
+        }
+        const imageUrl = await urlFromFireBase(req.file)
+        console.log(imageUrl)
+        if (!imageUrl) {
+            return res.status(500).json({
+                message: 'Lỗi khi lấy url image!',
+            })
+        }
+
+        const newProduct = await Product.create({
+            id: idOfNewProduct,
+            name,
+            category,
+            description,
+            imageUrl,
+            weight,
+            price,
+            available,
+        })
+
+        if (newProduct) {
+            return res.status(201).json({
                 message: 'Thêm sản phẩm thành công',
                 data: {
-                    newProduct: newProduct,
+                    newProduct,
                 },
             })
+        }
+
+        res.status(500).json({
+            message: 'Không thể thêm mới. Kiểm tra lại các trường đầu vào!!',
+        })
     } catch (err) {
         res.status(500).json({
             message: 'Có lỗi xảy ra',

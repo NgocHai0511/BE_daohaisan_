@@ -10,9 +10,9 @@ router.get('/products/:searchstring', productController.searchProducts)
 //GET --- api/user/product/:id
 router.get('/product/:id', productController.getSingleProduct)
 //POST -- api/user/product
-router.post('/product', upload.single("imageUrl") , productController.createProduct)
+router.post('/product', upload.single('image'), productController.createProduct)
 //PUT --api/user/product
-router.put('/product/', upload.single("imageUrl"), productController.updateProduct)
+router.put('/product/', upload.single('image'), productController.updateProduct)
 //POST --api/user/product
 router.post('/product', productController.createProduct)
 //DELETE --api/user/product
