@@ -257,4 +257,4 @@ Các trường email,phone là duy nhất
     -   `page`:(không bắt buộc, giá trị default = 1) là trang muốn tìm
     -   `size`: là số sản phẩm mỗi trang (không bắt buộc, nếu không truyền thì mặc định = 6)
     -   `category`: là loại sản phẩm (không bắt buộc, nếu không truyền thì sẽ lấy tất cả sản phẩm)
-        `Example endpoint:`: /api/product?page=1&size=10&category=Ốc
+    -  `Example endpoint:`: /api/product?page=1&size=10&category=Ốc
