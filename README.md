@@ -247,3 +247,14 @@ Các trường email,phone là duy nhất
 -   **Yêu cầu API:** Lấy thông tin chi tiết sản phẩm thông qua mã sản phẩm
 -   **Phương thức:** GET
 -   **ENDPOINT:** `/api/admin/products/SP0001`
+
+### 17. Phân trang sản phẩm
+
+-   **Yêu cầu API:** Lấy sản phẩm thông qua số trang, số lượng muốn lấy (nên để cố định), tên category nếu có
+-   **Phương thức:** GET (chú ý các tham số được để theo kiểu query chứ không phải params)
+-   **ENDPOINT:** `/api/product`
+    Giải thích tham số:
+    -   `page`:(không bắt buộc, giá trị default = 1) là trang muốn tìm
+    -   `size`: là số sản phẩm mỗi trang (không bắt buộc, nếu không truyền thì mặc định = 6)
+    -   `category`: là loại sản phẩm (không bắt buộc, nếu không truyền thì sẽ lấy tất cả sản phẩm)
+        `Example endpoint:`: /api/product?page=1&size=10&category=Ốc

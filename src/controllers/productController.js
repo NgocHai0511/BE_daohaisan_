@@ -2,7 +2,7 @@ const { auto_create_id_product } = require('../config/generateId.js')
 const Product = require('../models/Product.js')
 const { urlFromFireBase } = require('../config/setupfirebase.js')
 
-const getAllProducts = async (req, res, nexr) => {
+const getAllProducts = async (req, res, next) => {
     try {
         let allProducts = await Product.find()
         if (allProducts.length == 0) {
@@ -147,9 +147,47 @@ const getSingleProduct = (req, res, next) => {
             }
             res.status(err.statusCode).json({
                 message: 'Có lỗi xảy ra',
-                data: { error: err },
+                data: { error: err.message },
             })
         })
+}
+
+const getPanigationProduct = async (req, res, next) => {
+    try {
+        let page = parseInt(req.query.page) || 1
+        let size = parseInt(req.query.size) || 6
+        let category = req.query.category || ''
+
+        let getPageProduct = await Product.aggregate([
+            {
+                $match: {
+                    category: { $regex: `.*${category}.*`, $options: 'i' }, // ignore case
+                },
+            },
+            { $skip: (page - 1) * size },
+            { $limit: size },
+        ])
+
+        if (getPageProduct.length != 0) {
+            res.status(200).json({
+                message: 'Successfully',
+                data: {
+                    products: getPageProduct,
+                },
+            })
+        } else {
+            res.status(404).json({
+                message: 'Không tìm được sản phẩm. kiểm tra tham số đầu vào.',
+            })
+        }
+    } catch (err) {
+        res.status(500).json({
+            message: 'Có lỗi xảy ra',
+            data: {
+                error: err,
+            },
+        })
+    }
 }
 
 const updateProduct = async (req, res, next) => {
@@ -224,6 +262,7 @@ const deleteProduct = async (req, res, next) => {
 module.exports = {
     getAllProducts,
     getSingleProduct,
+    getPanigationProduct,
     createProduct,
     updateProduct,
     deleteProduct,
