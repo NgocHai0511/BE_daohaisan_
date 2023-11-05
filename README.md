@@ -2,6 +2,8 @@
 
 Domain: `daohaisan.azurewebsites.net/`
 
+**To start Server. Please wait a while for your first visit.**
+
 Đối với các route cần xác thực => Gửi token lên bằng headers với key là `authorization`. Token phải bắt đầu bằng 'Bearer '.
 (Hiện tại chưa cần xác thực)
 
