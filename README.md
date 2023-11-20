@@ -193,7 +193,14 @@ Các trường email,phone là duy nhất
   }
   ````
 
-### 10. Cập nhật thông tin một User
+### 10. Lấy thông tin khách hàng qua id
+
+- **Yêu cầu API:** Lấy thông tin của khách hàng thông qua id.
+- **Phương thức:** GET
+- **ENDPOINT:** `/api/user/:id`
+  Ví dụ: https://daohaisan.azurewebsites.net/api/user/KH0001
+
+### 11. Cập nhật thông tin một User
 
 - **Yêu cầu API:** Cập nhật thông tin của một người dùng dựa trên ID.
 - **Phương thức:** PUT
@@ -220,13 +227,13 @@ Các trường email,phone là duy nhất
   - `gender`: "123"
   - `address`: "123"
 
-### 11. Lấy thông tin giỏ hàng của một User
+### 12. Lấy thông tin giỏ hàng của một User
 
 - **Yêu cầu API:** Lấy thông tin giỏ hàng của một người dùng dựa trên ID người dùng.
 - **Phương thức:** GET
 - **ENDPOINT:** `/api/user/cart/KH0001`
 
-### 12. Thêm 1 sản phẩm vào giỏ hàng của 1 user
+### 13. Thêm 1 sản phẩm vào giỏ hàng của 1 user
 
 - **Yêu cầu API:** Thêm một sản phẩm vào giỏ hàng của một người dùng.
 - **Phương thức:** POST
@@ -239,7 +246,7 @@ Các trường email,phone là duy nhất
   }
   ```
 
-### 13. Xóa 1 sản phẩm ra khỏi giỏ hàng của 1 user
+### 14. Xóa 1 sản phẩm ra khỏi giỏ hàng của 1 user
 
 - **Yêu cầu API:** Xóa một sản phẩm khỏi giỏ hàng của một người dùng dựa trên ID sản phẩm.
 - **Phương thức:** PUT
@@ -252,7 +259,7 @@ Các trường email,phone là duy nhất
   }
   ```
 
-### 14. Tạo mới một đơn hàng
+### 15. Tạo mới một đơn hàng
 
 - **Yêu cầu API:** Tạo một đơn đặt hàng mới với thông tin cụ thể.
 - **Phương thức:** POST
@@ -278,25 +285,25 @@ Các trường email,phone là duy nhất
   }
   ```
 
-### 15. Lấy danh sách tất cả đơn đặt hàng
+### 16. Lấy danh sách tất cả đơn đặt hàng
 
 - **Yêu cầu API:** Lấy danh sách tất cả đơn đặt hàng.
 - **Phương thức:** GET
 - **ENDPOINT:** `/api/orders`
 
-### 16. Lấy thông tin đơn hàng của 1 user
+### 17. Lấy thông tin đơn hàng của 1 user
 
 - **Yêu cầu API:** Lấy danh sách các đơn đặt hàng dựa trên ID người dùng.
 - **Phương thức:** GET
 - **ENDPOINT:** `/api/orders/KH0002`
 
-### 17. Lấy thông tin đơn hàng theo id của chính nó
+### 18. Lấy thông tin đơn hàng theo id của chính nó
 
 - **Yêu cầu API:** Lấy đơn đặt hàng dựa trên ID của chính nó.
 - **Phương thức:** GET
 - **ENDPOINT:** `/api/order/DH0002`
 
-### 18. Cập nhật trạng thái đơn hàng
+### 19. Cập nhật trạng thái đơn hàng
 
 - **Yêu cầu API:** Cập nhật trạng thái đơn đặt hàng.
 - **Phương thức:** PUT
@@ -309,13 +316,13 @@ Các trường email,phone là duy nhất
   }
   ```
 
-### 19. Xem thông chi tiết sản phẩm
+### 20. Xem thông chi tiết sản phẩm
 
 - **Yêu cầu API:** Lấy thông tin chi tiết sản phẩm thông qua mã sản phẩm
 - **Phương thức:** GET
 - **ENDPOINT:** `/api/admin/products/SP0001`
 
-### 20. Phân trang sản phẩm
+### 21. Phân trang sản phẩm
 
 - **Yêu cầu API:** Lấy sản phẩm thông qua số trang, số lượng muốn lấy (nên để cố định), tên category nếu có
 - **Phương thức:** GET (chú ý các tham số được để theo kiểu query chứ không phải params)

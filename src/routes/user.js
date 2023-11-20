@@ -5,9 +5,11 @@ const { upload } = require("../config/setupfirebase");
 
 //[GET] api/users
 router.get("/users", userController.getAllUser);
+//[GET] api/user/:id
+router.get("/user/:id", userController.getUser);
 //[GET] api/customers
 router.get("/customers", userController.getAllCustomer);
-//[GET] api/user/:id
+//[POST] api/user/login
 router.post("/user/login", userController.loginUser);
 //[POST] api/user/
 router.post("/user/register", userController.registerUser);

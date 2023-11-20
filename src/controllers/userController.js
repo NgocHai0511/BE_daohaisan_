@@ -30,6 +30,20 @@ const getAllCustomer = (req, res) => {
     .catch((err) => res.status(500).json({ err: err }));
 };
 
+const getUser = (req, res) => {
+  const id = req.params.id;
+  User.find({ id: id })
+    .then((user) => {
+      res.status(200).json({
+        message: "Fetched Successfully!",
+        data: {
+          user: user,
+        },
+      });
+    })
+    .catch((err) => res.status(500).json({ err: err }));
+};
+
 const registerUser = async (req, res, next) => {
   try {
     const { fullname, email, password, phone, gender, address } = req.body;
@@ -256,6 +270,7 @@ const removeProductFromCart = async (req, res) => {
 
 module.exports = {
   registerUser,
+  getUser,
   getAllUser,
   addProductToCart,
   loginUser,
