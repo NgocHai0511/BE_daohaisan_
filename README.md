@@ -18,7 +18,7 @@ interface Response {
 }
 ```
 
-## Format lỗi
+## Format lỗi just check rule
 
 ### Trong trường hợp lỗi 422 (thường do form) hoặc lỗi do truyền query / param bị sai
 
