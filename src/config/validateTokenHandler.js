@@ -8,13 +8,11 @@ const validateToken = async (req, res, next) => {
       token = authHeader.split(" ")[1];
       jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
         if (err) {
-          return res
-            .status(401)
-            .json({
-              message:
-                "Lỗi mã token không hợp lệ! Bạn nên thực hiện việc đăng nhập trước khi sử dụng các tính năng khác.",
-              err: err.message,
-            });
+          return res.status(401).json({
+            message:
+              "Lỗi mã token không hợp lệ! Bạn nên thực hiện việc đăng nhập trước khi sử dụng các tính năng khác.",
+            err: err.message,
+          });
         }
         req.user = decoded.user;
         next();
@@ -25,6 +23,10 @@ const validateToken = async (req, res, next) => {
           message: "Người dùng chưa thực hiện việc xác thực hoặc mã đã bị mất!",
         });
       }
+    } else {
+      return res.status(401).json({
+        message: "Người dùng chưa thực hiện việc xác thực hoặc mã đã bị mất!",
+      });
     }
   } catch (err) {
     console.log(err);
