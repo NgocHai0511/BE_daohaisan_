@@ -45,14 +45,14 @@ router.post("/resetpass/checkResetCode", userController.checkResetCode);
 router.put("/resetpass/", userController.changePassword);
 
 //[GET] api/order
-router.get("/orders", orderController.getAllOrder);
+router.get("/orders", validateToken, orderController.getAllOrder);
 //[GET] api/order:userId (get order by userId)
-router.get("/orders/:userId", orderController.getOrderByUserId);
+router.get("/orders/:userId", validateToken, orderController.getOrderByUserId);
 //[GET] api/order:id (get order by id)
-router.get("/order/:id", orderController.getOrderById);
+router.get("/order/:id", validateToken, orderController.getOrderById);
 //[POST] api/order
-router.post("/order", orderController.createOrder);
+router.post("/order", validateToken, orderController.createOrder);
 //[PUT] api/order
-router.put("/order", orderController.updateStatusOrder);
+router.put("/order", validateToken, orderController.updateStatusOrder);
 
 module.exports = router;

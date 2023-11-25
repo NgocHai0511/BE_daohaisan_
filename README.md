@@ -397,7 +397,7 @@ Các trường email,phone là duy nhất
 
 ---
 
-**_Chú ý web hiện tại đã thêm tính năng xác thực thông qua jsonwebtoken, ngoại trừ API: đăng ký, đăng nhập, lấy tất cả sản phẩm, xem chi tiết xản phẩm và đổi mật khẩu ở khách hàng thì các API còn lại đều phải gửi thêm jsonwebtoken _**
+**_Chú ý web hiện tại đã thêm tính năng xác thực thông qua jsonwebtoken, ngoại trừ API: đăng ký, đăng nhập, lấy tất cả sản phẩm, xem chi tiết xản phẩm, tìm kiếm sản phẩm, phân trang sản phẩm và đổi mật khẩu ở khách hàng thì các API còn lại đều phải gửi thêm jsonwebtoken _**
 
 ```Ví dụ về cách sử dụng jsonwebtoken ở client:
 {
