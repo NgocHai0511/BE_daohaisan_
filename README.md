@@ -94,7 +94,7 @@ Ví dụ dữ liệu form data:
   - `weight` (text): Trọng lượng sản phẩm.
   - `price` (text): Giá sản phẩm.
   - `available` (text): Số lượng có sẵn.
-  - `imageUrl` (file): Hình ảnh sản phẩm.
+  - `image` (file): Hình ảnh sản phẩm.
 
 Ví dụ dữ liệu form data:
 
@@ -105,7 +105,7 @@ Ví dụ dữ liệu form data:
 - `weight`: "100g"
 - `price`: "50000"
 - `available`: "10"
-- `imageUrl`: [file image] (Tải lên hình ảnh sản phẩm)
+- `image`: [file image] (Tải lên hình ảnh sản phẩm)
 
 ### 5. Xóa sản phẩm
 
@@ -205,25 +205,23 @@ Các trường email,phone là duy nhất
 - **Yêu cầu API:** Cập nhật thông tin của một người dùng dựa trên ID.
 - **Phương thức:** PUT
 - **ENDPOINT:** `/api/user`
-- **Body:** Dữ liệu người dùng cần cập nhật dưới dạng Form Data với các trường thông tin sau:
+- **Body:** Dữ liệu người dùng cần cập nhật dưới dạng Form Data với các trường thông tin sau (Không cần gửi userId vì trong token đã có):
 
-  - `userId` (text): ID của người dùng cần cập nhật.
   - `fullname` (text): Tên đầy đủ của người dùng.
   - `email` (text): Địa chỉ email của người dùng.
   - `password` (text): Mật khẩu người dùng.
   - `phone` (text): Số điện thoại của người dùng.
-  - `avatarUrl` (file): Đường dẫn đến hình ảnh avatar của người dùng.
+  - `avatar` (file): Đường dẫn đến hình ảnh avatar của người dùng.
   - `gender` (text): Giới tính của người dùng.
   - `address` (text): Địa chỉ của người dùng.
 
   Ví dụ dữ liệu form data:
 
-  - `userId`: "KH0002"
   - `fullname`: "User 2"
   - `email`: "user2@gmail.com"
   - `password`: "user 4"
   - `phone`: "2"
-  - `avatarUrl`: [file image] (Tải lên hình ảnh avatar)
+  - `avatar`: [file image] (Tải lên hình ảnh avatar)
   - `gender`: "123"
   - `address`: "123"
 
@@ -439,3 +437,41 @@ Các trường email,phone là duy nhất
 ```
 
 ---
+
+### 24. Cập nhật mật khẩu trong phần quản lý my account
+
+- **Yêu cầu API:** Thực hiện cập nhật mật khẩu người dùng trong phần quản lý account
+- **Phương thức:** PUT
+- **ENDPOINT:** /api/user/changePass
+- **Body:** Dữ liệu bao gồm mật khẩu mới
+  ```json
+  {
+    "password": "123456"
+  }
+  ```
+- **Kết quả trả về(thành công):**
+  ```json
+  {
+    "message": "Đã đổi mật khẩu thành công!",
+    "data": {
+      "newUser": {
+        "cart": {
+          "items": []
+        },
+        "_id": "653955b7cb5c40ed727dac00",
+        "id": "KH0005",
+        "fullname": "nhan123",
+        "email": "nhan@gmail.com",
+        "password": "123456",
+        "phone": "099848484",
+        "avatarUrl": "https://firebasestorage.googleapis.com/v0/b/uploadfileimage-fd0ce.appspot.com/o/files%2Flogo-uit.png?alt=media&token=45e72578-3609-44b1-a684-fd76322f3526",
+        "gender": "male",
+        "address": "tpHCM",
+        "isAdmin": false,
+        "createdAt": "2023-10-25T17:51:51.380Z",
+        "updatedAt": "2023-11-26T03:40:24.954Z",
+        "__v": 0
+      }
+    }
+  }
+  ```

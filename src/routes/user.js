@@ -16,10 +16,16 @@ router.post("/user/login", userController.loginUser);
 router.post("/user/register", userController.registerUser);
 //[PUT] api/user
 router.put(
-  "/user",
+  "/user/info",
   validateToken,
   upload.single("avatar"),
   userController.updateUser
+);
+//[PUT] api/user/changePass
+router.put(
+  "/user/changePass",
+  validateToken,
+  userController.updatePasswordUser
 );
 
 //[GET] api/user/cart/:id
