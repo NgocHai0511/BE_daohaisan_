@@ -209,7 +209,6 @@ Các trường email,phone là duy nhất
 
   - `fullname` (text): Tên đầy đủ của người dùng.
   - `email` (text): Địa chỉ email của người dùng.
-  - `password` (text): Mật khẩu người dùng.
   - `phone` (text): Số điện thoại của người dùng.
   - `avatar` (file): Đường dẫn đến hình ảnh avatar của người dùng.
   - `gender` (text): Giới tính của người dùng.
@@ -219,7 +218,6 @@ Các trường email,phone là duy nhất
 
   - `fullname`: "User 2"
   - `email`: "user2@gmail.com"
-  - `password`: "user 4"
   - `phone`: "2"
   - `avatar`: [file image] (Tải lên hình ảnh avatar)
   - `gender`: "123"

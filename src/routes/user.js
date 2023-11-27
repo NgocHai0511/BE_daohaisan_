@@ -14,7 +14,7 @@ router.get("/customers", userController.getAllCustomer);
 router.post("/user/login", userController.loginUser);
 //[POST] api/user/
 router.post("/user/register", userController.registerUser);
-//[PUT] api/user
+//[PUT] api/user/info
 router.put(
   "/user/info",
   validateToken,

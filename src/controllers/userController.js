@@ -124,12 +124,11 @@ const loginUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
   try {
-    const { fullname, email, password, phone, gender, address } = req.body;
+    const { fullname, email, phone, gender, address } = req.body;
     const user = await User.findOne({ id: req.user.id });
     if (!user) return res.status(404).json({ message: "User not fount" });
     user.fullname = fullname;
     user.email = email;
-    user.password = password;
     user.phone = phone;
     user.avatarUrl = await urlFromFireBase(req.file);
     user.gender = gender;
