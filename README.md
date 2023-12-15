@@ -476,7 +476,7 @@ Các trường email,phone là duy nhất
 
 ---
 
-## Các API nằm trong chức năng quên mật khẩu (25 - 27):
+## Các API nằm trong chức năng quên mật khẩu (26 - 28):
 
 ### 26. Kiểm tra email
 
