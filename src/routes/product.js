@@ -12,22 +12,20 @@ router.get("/products/:searchstring", productController.searchProducts);
 router.get("/product/:id", productController.getSingleProduct);
 //GET --- api/product/page
 router.get("/product/", productController.getPanigationProduct);
-//POST -- api/product
-router.post(
-  "/product",
-  validateToken,
-  upload.single("image"),
-  productController.createProduct
-);
-//PUT --api/product
-router.put(
-  "/product/",
-  validateToken,
-  upload.single("image"),
-  productController.updateProduct
-);
-//POST --api/product
-router.post("/product", validateToken, productController.createProduct);
-//DELETE --api/product
-router.delete("/product/:id", validateToken, productController.deleteProduct);
+// //POST -- api/product
+// router.post(
+//   "/product",
+//   validateToken,
+//   upload.single("image"),
+//   productController.createProduct
+// );
+// //PUT --api/product
+// router.put(
+//   "/product/",
+//   validateToken,
+//   upload.single("image"),
+//   productController.updateProduct
+// );
+// //DELETE --api/product
+// router.delete("/product/:id", validateToken, productController.deleteProduct);
 module.exports = router;

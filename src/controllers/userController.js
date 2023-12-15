@@ -5,7 +5,7 @@ const User = require("../models/User");
 const ResetCode = require("../models/ResetCode");
 const { urlFromFireBase } = require("../config/setupfirebase.js");
 const { transporter, mailOptions } = require("../config/setUpMailer.js");
-const randomCode = require("../config/generateResetCode.js");
+const { randomResetCode } = require("../config/generateResetCode.js");
 
 const getAllUser = (req, res) => {
   User.find()
@@ -103,8 +103,6 @@ const loginUser = async (req, res) => {
       {
         user: {
           id: user.id,
-          email: user.email,
-          fullname: user.fullname,
           isAdmin: user.isAdmin,
         },
       },
@@ -122,7 +120,7 @@ const loginUser = async (req, res) => {
   }
 };
 
-const updateUser = async (req, res) => {
+const updateUserInfo = async (req, res) => {
   try {
     const { fullname, email, phone, gender, address } = req.body;
     const user = await User.findOne({ id: req.user.id });
@@ -130,7 +128,6 @@ const updateUser = async (req, res) => {
     user.fullname = fullname;
     user.email = email;
     user.phone = phone;
-    user.avatarUrl = await urlFromFireBase(req.file);
     user.gender = gender;
     user.address = address;
     const newUser = await user.save();
@@ -161,6 +158,36 @@ const updatePasswordUser = async (req, res) => {
   }
 };
 
+const updateUserAvatar = async (req, res) => {
+  try {
+    const user = await User.findOne({ id: req.user.id });
+    if (!user) return res.status(404).json({ message: "User not fount" });
+    user.avatarUrl = await urlFromFireBase(req.file);
+    const newUser = await user.save();
+    res.status(200).json({
+      message: "Cập nhập thành công",
+      data: { newUser: newUser },
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Có lỗi xảy ra", err: err.message });
+  }
+};
+
+const deleteUser = async (req, res) => {
+  try {
+    const id = req.user.id;
+    const deletedUser = await User.findOneAndDelete({ id: id });
+    if (!deletedUser) {
+      return res.status(404).json({ message: "User not fount" });
+    }
+    return res.status(201).json({ mesage: "Delete successfully!!" });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Có lỗi xảy ra", err: err.message });
+  }
+};
+
 // const getCart = async (req, res) => {
 //     try {
 //         const userId = req.params.id
@@ -183,7 +210,7 @@ const updatePasswordUser = async (req, res) => {
 
 const getCart = async (req, res) => {
   try {
-    const userId = req.params.id;
+    const userId = req.user.id;
     const user = await User.findOne({ id: userId });
 
     if (!user) {
@@ -215,7 +242,9 @@ const getCart = async (req, res) => {
 
 const addProductToCart = async (req, res) => {
   try {
-    const { userId, productId } = req.body;
+    const userId = req.user.id;
+
+    const productId = req.body.productId;
 
     const user = await User.findOne({ id: userId });
     if (!user) {
@@ -229,6 +258,7 @@ const addProductToCart = async (req, res) => {
     const cartItem = user.cart.items.find(
       (item) => item.productId === productId
     );
+    // Nếu tìm thấy sản phẩm trong giỏ hàng thì tăng số lượng lên 1
     if (cartItem) {
       cartItem.quantity += 1;
     } else {
@@ -251,9 +281,52 @@ const addProductToCart = async (req, res) => {
   }
 };
 
+const dscQuantityProductInCart = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const productId = req.body.productId;
+
+    const user = await User.findOne({ id: userId });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    const product = await Product.findOne({ id: productId });
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    const cartItem = user.cart.items.find(
+      (item) => item.productId === productId
+    );
+    // Nếu tìm thấy sản phẩm trong giỏ hàng thì giảm số lượng 1
+    if (cartItem) {
+      if (cartItem.quantity == 1) {
+        user.cart.items = user.cart.items.filter(
+          (item) => item.productId !== productId
+        );
+      } else cartItem.quantity -= 1;
+    } else {
+      return res.status(404).json({ message: "Product not found in cart" });
+    }
+
+    await user.save();
+    res.status(200).json({
+      message: "Giỏ hàng đã được cập nhập",
+      data: {
+        cart: user.cart,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Có lỗi xảy ra", error: err.message });
+  }
+};
+
 const removeProductFromCart = async (req, res) => {
   try {
-    const { userId, productId } = req.body;
+    const userId = req.user.id;
+    const productId = req.body.productId;
     const user = await User.findOne({ id: userId });
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -298,7 +371,7 @@ const checkMailAndSendCode = async (req, res) => {
 
     const newResetCode = await ResetCode.create({
       user_id: user.id,
-      code: randomCode,
+      code: randomResetCode,
       expirationDate,
     });
 
@@ -407,9 +480,12 @@ module.exports = {
   getAllUser,
   addProductToCart,
   loginUser,
-  updateUser,
+  updateUserInfo,
   updatePasswordUser,
+  updateUserAvatar,
+  deleteUser,
   removeProductFromCart,
+  dscQuantityProductInCart,
   getCart,
   getAllCustomer,
   checkMailAndSendCode,

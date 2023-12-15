@@ -14,6 +14,8 @@ function generateRandomCode(length) {
 }
 
 // Sử dụng hàm để tạo một mã ngẫu nhiên có độ dài 8
-const randomCode = generateRandomCode(8);
+const randomResetCode = generateRandomCode(8);
 
-module.exports = randomCode;
+const randomPromoCode = generateRandomCode(5);
+
+module.exports = { randomResetCode, randomPromoCode };

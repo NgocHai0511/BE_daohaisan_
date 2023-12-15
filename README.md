@@ -4,7 +4,7 @@ Domain: `daohaisan.azurewebsites.net/`
 
 **To start Server. Please wait a while for your first visit.**
 
-**_Chú ý web hiện tại đã thêm tính năng xác thực thông qua jsonwebtoken, ngoại trừ API: đăng ký, đăng nhập, lấy tất cả sản phẩm, xem chi tiết xản phẩm, tìm kiếm sản phẩm, phân trang sản phẩm và đổi mật khẩu ở khách hàng thì các API còn lại đều phải gửi thêm mã jsonwebtoken _**
+**_ Chú ý web hiện tại đã thêm tính năng xác thực thông qua jsonwebtoken, ngoại trừ API: đăng ký, đăng nhập, lấy tất cả sản phẩm, xem chi tiết xản phẩm, tìm kiếm sản phẩm, phân trang sản phẩm và đổi mật khẩu ở khách hàng thì các API còn lại đều phải gửi thêm mã jsonwebtoken _**
 
 ```Ví dụ về cách sử dụng jsonwebtoken ở client:
 {
@@ -101,7 +101,7 @@ Ví dụ về lỗi
 
 - **Yêu cầu API:** Tạo một sản phẩm mới với thông tin cụ thể.
 - **Phương thức:** POST
-- **ENDPOINT:** `/api/product`
+- **ENDPOINT:** `/api/admin/product`
 - **Body:** Dữ liệu sản phẩm dưới dạng Form Data với các trường thông tin sau:
 
   - `name` (text): Tên sản phẩm.
@@ -110,7 +110,7 @@ Ví dụ về lỗi
   - `weight` (text): Trọng lượng sản phẩm.
   - `price` (text): Giá sản phẩm.
   - `available` (text): Số lượng có sẵn.
-  - `imageUrl` (file): Hình ảnh sản phẩm.
+  - `image` (file): Hình ảnh sản phẩm.
 
 Ví dụ dữ liệu form data:
 
@@ -120,13 +120,13 @@ Ví dụ dữ liệu form data:
 - `weight`: "100g"
 - `price`: "50000"
 - `available`: "10"
-- `imageUrl`: [file image] (Tải lên hình ảnh sản phẩm)
+- `image`: [file image] (Tải lên hình ảnh sản phẩm)
 
 ### 4. Cập nhật thông tin sản phẩm
 
 - **Yêu cầu API:** Cập nhật thông tin của một sản phẩm dựa trên ID.
 - **Phương thức:** PUT
-- **ENDPOINT:** `/api/product`
+- **ENDPOINT:** `/api/admin/product`
 - **Body:** Dữ liệu sản phẩm cần cập nhật dưới dạng Form Data với các trường thông tin sau:
 
   - `id` (text): Mã sản phẩm cần cập nhật.
@@ -153,7 +153,7 @@ Ví dụ dữ liệu form data:
 
 - **Yêu cầu API:** Xóa một sản phẩm dựa trên ID.
 - **Phương thức:** DELETE
-- **ENDPOINT:** `/api/product/SP0015`
+- **ENDPOINT:** `/api/admin/product/SP0015`
 
 ### 6. Xem thông chi tiết sản phẩm
 
@@ -180,13 +180,13 @@ Ví dụ dữ liệu form data:
 
 - **Yêu cầu API:** Lấy danh sách tất cả người dùng, bao gồm cả người dùng quản trị (Admin).
 - **Phương thức:** GET
-- **ENDPOINT:** `/api/users`
+- **ENDPOINT:** `/api/admin/users`
 
 ### 9. Lấy danh sách tất cả Khách hàng
 
 - **Yêu cầu API:** Lấy danh sách tất cả khách hàng.
 - **Phương thức:** GET
-- **ENDPOINT:** `/api/customers`
+- **ENDPOINT:** `/api/admin/customers`
 
 ### 10. Tạo mới một tài khoản User
 
@@ -265,15 +265,14 @@ Các trường email,phone là duy nhất
 
 ### 13. Cập nhật thông tin một User
 
-- **Yêu cầu API:** Cập nhật thông tin của một người dùng dựa trên ID.
+- **Yêu cầu API:** Cập nhật thông tin của một người dùng (không bao gồm mật khẩu và ảnh đại diện).
 - **Phương thức:** PUT
-- **ENDPOINT:** `/api/user`
-- **Body:** Dữ liệu người dùng cần cập nhật dưới dạng Form Data với các trường thông tin sau (Không cần gửi userId vì trong token đã có):
+- **ENDPOINT:** `/api/user/info`
+- **Body:** Dữ liệu người dùng cần cập nhật dưới dạng application/json với các trường thông tin sau (Không cần gửi userId vì trong token đã có):
 
   - `fullname` (text): Tên đầy đủ của người dùng.
   - `email` (text): Địa chỉ email của người dùng.
   - `phone` (text): Số điện thoại của người dùng.
-  - `avatar` (file): Đường dẫn đến hình ảnh avatar của người dùng.
   - `gender` (text): Giới tính của người dùng.
   - `address` (text): Địa chỉ của người dùng.
 
@@ -282,7 +281,6 @@ Các trường email,phone là duy nhất
   - `fullname`: "User 2"
   - `email`: "user2@gmail.com"
   - `phone`: "2"
-  - `avatar`: [file image] (Tải lên hình ảnh avatar)
   - `gender`: "123"
   - `address`: "123"
 
@@ -324,34 +322,85 @@ Các trường email,phone là duy nhất
   }
   ```
 
+### 15. Cập nhật ảnh đại diện của người dùng
+
+- **Yêu cầu API:** Thực hiện cập nhật ảnh đại diện của người dùng trong phần quản lý account
+- **Phương thức:** PUT
+- **ENDPOINT:** /api/user/changeAvatar
+- **Body:** Dữ liệu được gửi theo kiểu multipart/form
+
+  Ví dụ dữ liệu form data:
+
+  - `avatar`: [Hình ảnh cần cập nhật]
+
+- **Kết quả trả về(thành công):**
+  ```json
+  {
+    "message": "Cập nhật thành công!",
+    "data": {
+      "newUser": {
+        "cart": {
+          "items": []
+        },
+        "_id": "653955b7cb5c40ed727dac00",
+        "id": "KH0005",
+        "fullname": "nhan123",
+        "email": "nhan@gmail.com",
+        "password": "123456",
+        "phone": "099848484",
+        "avatarUrl": "https://firebasestorage.googleapis.com/v0/b/uploadfileimage-fd0ce.appspot.com/o/files%2Flogo-uit.png?alt=media&token=45e72578-3609-44b1-a684-fd76322f3526",
+        "gender": "male",
+        "address": "tpHCM",
+        "isAdmin": false,
+        "createdAt": "2023-10-25T17:51:51.380Z",
+        "updatedAt": "2023-11-26T03:40:24.954Z",
+        "__v": 0
+      }
+    }
+  }
+  ```
+
+### 16. Xóa thông tin tài khoản người dùng
+
+- **Yêu cầu API:** Xóa tài khoản người dùng
+- **Phương thức:** DELETE
+- **ENDPOINT:** /api/user/delete
+
 ---
 
 ## API về giỏ hàng (cart)
 
-### 15. Lấy thông tin giỏ hàng của một User
+### 17. Lấy thông tin giỏ hàng của một User
 
 - **Yêu cầu API:** Lấy thông tin giỏ hàng của một người dùng dựa trên ID người dùng.
 - **Phương thức:** GET
 - **ENDPOINT:** `/api/user/cart/KH0001`
 
-### 16. Thêm 1 sản phẩm vào giỏ hàng của 1 user
+### 18. Thêm 1 sản phẩm vào giỏ hàng của 1 user
 
 - **Yêu cầu API:** Thêm một sản phẩm vào giỏ hàng của một người dùng.
 - **Phương thức:** POST
 - **ENDPOINT:** `/api/user/addCartItem`
-- **Body:** Dữ liệu sản phẩm và người dùng (JSON).
+- **Body:** Dữ liệu id sản phẩm.
   ```json
   {
-    "userId": "KH0002",
     "productId": "SP0003"
   }
   ```
 
----
+### 19. Giảm số lượng của sản phẩm đi 1 trong giỏ hàng của 1 user
 
-## API về đơn hàng (order):
+- **Yêu cầu API:** Giảm số lượng của sản phẩm đi 1 trong giỏ hàng của một người dùng.
+- **Phương thức:** PUT
+- **ENDPOINT:** `/api/user/dscCartItem`
+- **Body:** Dữ liệu id sản phẩm.
+  ```json
+  {
+    "productId": "SP0003"
+  }
+  ```
 
-### 17. Xóa 1 sản phẩm ra khỏi giỏ hàng của 1 user
+### 20. Xóa 1 sản phẩm ra khỏi giỏ hàng của 1 user
 
 - **Yêu cầu API:** Xóa một sản phẩm khỏi giỏ hàng của một người dùng dựa trên ID sản phẩm.
 - **Phương thức:** PUT
@@ -364,7 +413,11 @@ Các trường email,phone là duy nhất
   }
   ```
 
-### 18. Tạo mới một đơn hàng
+---
+
+## API về đơn hàng (order):
+
+### 21. Tạo mới một đơn hàng
 
 - **Yêu cầu API:** Tạo một đơn đặt hàng mới với thông tin cụ thể.
 - **Phương thức:** POST
@@ -372,7 +425,6 @@ Các trường email,phone là duy nhất
 - **Body:** Dữ liệu đơn đặt hàng (JSON).
   ```json
   {
-    "userId": "KH0002",
     "products": [
       {
         "name": "Cá heo",
@@ -390,25 +442,25 @@ Các trường email,phone là duy nhất
   }
   ```
 
-### 19. Lấy danh sách tất cả đơn đặt hàng
+### 22. Lấy danh sách tất cả đơn đặt hàng
 
 - **Yêu cầu API:** Lấy danh sách tất cả đơn đặt hàng.
 - **Phương thức:** GET
 - **ENDPOINT:** `/api/orders`
 
-### 20. Lấy thông tin đơn hàng của 1 user
+### 23. Lấy thông tin đơn hàng của 1 user
 
 - **Yêu cầu API:** Lấy danh sách các đơn đặt hàng dựa trên ID người dùng.
 - **Phương thức:** GET
 - **ENDPOINT:** `/api/orders/KH0002`
 
-### 21. Lấy thông tin đơn hàng theo id của chính nó
+### 24. Lấy thông tin đơn hàng theo id của chính nó
 
 - **Yêu cầu API:** Lấy đơn đặt hàng dựa trên ID của chính nó.
 - **Phương thức:** GET
 - **ENDPOINT:** `/api/order/DH0002`
 
-### 22. Cập nhật trạng thái đơn hàng
+### 25. Cập nhật trạng thái đơn hàng
 
 - **Yêu cầu API:** Cập nhật trạng thái đơn đặt hàng.
 - **Phương thức:** PUT
@@ -422,9 +474,11 @@ Các trường email,phone là duy nhất
   }
   ```
 
-## Các API nằm trong chức năng quên mật khẩu (23 - 25):
+---
 
-### 23. Kiểm tra email
+## Các API nằm trong chức năng quên mật khẩu (25 - 27):
+
+### 26. Kiểm tra email
 
 - **Yêu cầu API:** Thực hiện xác thực email người dùng đã gửi
 - **Phương thức:** POST
@@ -442,7 +496,7 @@ Các trường email,phone là duy nhất
   }
   ```
 
-### 24. Kiểm tra mã xác nhận
+### 27. Kiểm tra mã xác nhận
 
 - **Yêu cầu API:** Thực hiện kiểm tra mã xác nhận từ người dùng
 - **Phương thức:** POST
@@ -463,7 +517,7 @@ Các trường email,phone là duy nhất
   }
   ```
 
-### 25. Cập nhật mật khẩu
+### 28. Cập nhật mật khẩu
 
 - **Yêu cầu API:** Thực hiện cập nhật mật khẩu người dùng
 - **Phương thức:** PUT
@@ -484,3 +538,84 @@ Các trường email,phone là duy nhất
   ```
 
 ---
+
+## API về mã khuyến mãi (PromoCode):
+
+### 29. Lấy tất cả mã khuyến mãi
+
+- **Yêu cầu API:** Lấy tất cả các mã khuyến mãi
+- **Phương thức:** GET
+- **ENDPOINT:** /api/admin/promocode
+
+- **Kết quả trả về(thành công):**
+  ```json
+  {
+    "message": "Tất cả mã khuyến mãi!",
+    "data": [
+      ...
+    ]
+  }
+  ```
+
+### 30. Thêm mã khuyến mãi
+
+- **Yêu cầu API:** Thêm mã khuyến mãi vào CSDL
+- **Phương thức:** POST
+- **ENDPOINT:** /api/admin/promocode
+- **Body:** Dữ liệu bao gồm mã khuyến mãi, id người dùng, số lượng sử dụng, giá trị
+  ```json
+  {
+    "code": "YDHHSGWY",
+    "user_id": "KH0003",
+    "available": "3",
+    "value": 0.05
+  }
+  ```
+- **Kết quả trả về(thành công):**
+  ```json
+  {
+    "message": "Thêm thành công mã giảm giá!",
+    "newPromoCode": {
+      ...
+    }
+  }
+  ```
+
+### 31. Xóa mã khuyến mãi
+
+- **Yêu cầu API:** Xóa mã khuyến mãi trong CSDL
+- **Phương thức:** DELETE
+- **ENDPOINT:** /api/admin/promocode
+- **Body:** Dữ liệu gồm có mã khuyến mãi
+  ```json
+  {
+    "code": "YDHHSGWY"
+  }
+  ```
+- **Kết quả trả về(thành công):**
+  ```json
+  {
+    "message": "Đã xóa mã khuyến mãi!",
+    "data": {
+      "deletedPromoCode" : {
+        ...
+      }
+    }
+  }
+  ```
+
+### 32. Kiểm tra mã khuyến mãi
+
+- **Yêu cầu API:** Kiểm tra mã khuyến mãi
+- **Phương thức:** GET
+- **ENDPOINT:** /api/promocode/:code
+
+- **Kết quả trả về(thành công):**
+  ```json
+  {
+    "message": "Mã khuyến mãi hợp lệ!",
+    "promoCode": {
+      ...
+    }
+  }
+  ```

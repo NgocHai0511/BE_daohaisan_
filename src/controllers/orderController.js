@@ -2,7 +2,8 @@ const { auto_create_id_order } = require("../config/generateId");
 const Order = require("../models/Order");
 
 exports.createOrder = async (req, res) => {
-  const { userId, products, status, totalPrice, paymentInfo } = req.body;
+  const userId = req.user.id;
+  const { products, status, totalPrice, paymentInfo } = req.body;
   const id = await auto_create_id_order();
   const order = new Order({
     id,

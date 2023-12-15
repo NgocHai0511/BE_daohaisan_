@@ -1,7 +1,24 @@
 const router = require("express").Router();
 const validateToken = require("../config/validateTokenHandler");
 const productController = require("../controllers/productController");
+const promoCodeController = require("../controllers/promoCodeController");
+const orderController = require("../controllers/orderController");
+const userController = require("../controllers/userController");
+const checkAdmin = require("../config/checkAdmin.js");
+const { upload } = require("../config/setupfirebase");
 
+// API FOR USER
+//[GET] api/users
+router.get("/users", validateToken, checkAdmin, userController.getAllUser);
+//[GET] api/customers
+router.get(
+  "/customers",
+  validateToken,
+  checkAdmin,
+  userController.getAllCustomer
+);
+
+// API FOR PRODUCT
 //GET --- api/admin/products
 router.get("/products", validateToken, productController.getAllProducts);
 //GET -- api/admin/products/:searchstring
@@ -13,12 +30,58 @@ router.get(
 //GET --- api/admin/product/:id
 router.get("/product/:id", validateToken, productController.getSingleProduct);
 //POST -- api/admin/product
-router.post("/product", validateToken, productController.createProduct);
+router.post(
+  "/product",
+  validateToken,
+  checkAdmin,
+  upload.single("image"),
+  productController.createProduct
+);
 //PUT --api/admin/product
-router.put("/product/", validateToken, productController.updateProduct);
-//POST --api/admin/product
-router.post("/product", validateToken, productController.createProduct);
+router.put(
+  "/product/",
+  validateToken,
+  checkAdmin,
+  upload.single("image"),
+  productController.updateProduct
+);
 //DELETE --api/admin/product
-router.delete("/product/:id", validateToken, productController.deleteProduct);
+router.delete(
+  "/product/:id",
+  validateToken,
+  checkAdmin,
+  productController.deleteProduct
+);
+
+// API FOR ORDER
+//[GET] api/order
+router.get("/orders", validateToken, checkAdmin, orderController.getAllOrder);
+//[PUT] api/order
+router.put(
+  "/order",
+  validateToken,
+  checkAdmin,
+  orderController.updateStatusOrder
+);
+
+// API FOR PROMOCODE
+router.get(
+  "/promocode",
+  validateToken,
+  checkAdmin,
+  promoCodeController.getAllPromoCodes
+);
+router.post(
+  "/promocode",
+  validateToken,
+  checkAdmin,
+  promoCodeController.addPromoCode
+);
+router.delete(
+  "/promocode",
+  validateToken,
+  checkAdmin,
+  promoCodeController.removePromoCode
+);
 
 module.exports = router;
