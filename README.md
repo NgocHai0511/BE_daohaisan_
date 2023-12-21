@@ -374,7 +374,7 @@ Các trường email,phone là duy nhất
 
 - **Yêu cầu API:** Lấy thông tin giỏ hàng của một người dùng dựa trên ID người dùng.
 - **Phương thức:** GET
-- **ENDPOINT:** `/api/user/cart/KH0001`
+- **ENDPOINT:** `/api/user/cart`
 
 ### 18. Thêm 1 sản phẩm vào giỏ hàng của 1 user
 
