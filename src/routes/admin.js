@@ -52,17 +52,14 @@ router.delete(
   checkAdmin,
   productController.deleteProduct
 );
+//GET --api/admin/report
+router.get("/report", productController.analyzeDataAndReport);
 
 // API FOR ORDER
-//[GET] api/order
-router.get("/orders", validateToken, checkAdmin, orderController.getAllOrder);
-//[PUT] api/order
-router.put(
-  "/order",
-  validateToken,
-  checkAdmin,
-  orderController.updateStatusOrder
-);
+//[GET] api/admin/order
+router.get("/orders", orderController.getAllOrder);
+//[PUT] api/admin/order
+router.put("/order", orderController.updateStatusOrder);
 
 // API FOR PROMOCODE
 router.get(

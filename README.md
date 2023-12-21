@@ -619,3 +619,46 @@ Các trường email,phone là duy nhất
     }
   }
   ```
+
+---
+
+## API về báo cáo thống kê (PromoCode):
+
+### 33. Báo cáo thống kê về doanh thu loại sản phẩm, sản phẩm
+
+- **Yêu cầu API:** Báo cáo thống kê
+- **Phương thức:** GET
+- **ENDPOINT:** /api/admin/report
+
+- **Kết quả trả về(thành công):**
+  ```json
+  {
+    "data1": {
+      "total": 585000,
+      "dataCategory": [
+        {
+          "name": "Mực",
+          "value": 180000
+        },
+        {
+          "name": "Sò điệp",
+          "value": 405000
+        }
+      ],
+      "dataProduct": [
+        {
+          "value": 225000,
+          "name": "Sò điệp tươi ngon"
+        },
+        {
+          "value": 180000,
+          "name": "Sò điệp Đông Nam Á"
+        },
+        {
+          "value": 180000,
+          "name": "Mực ống đỏ"
+        }
+      ]
+    }
+  }
+  ```

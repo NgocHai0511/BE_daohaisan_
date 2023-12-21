@@ -1,5 +1,7 @@
 const { auto_create_id_product } = require("../config/generateId.js");
 const Product = require("../models/Product.js");
+const Order = require("../models/Order.js");
+const User = require("../models/User.js");
 const { urlFromFireBase } = require("../config/setupfirebase.js");
 
 const getAllProducts = async (req, res, next) => {
@@ -243,18 +245,244 @@ const deleteProduct = async (req, res, next) => {
       res.status(404).json({
         message: "Không tìm thấy sản phẩm nào để xóa",
       });
-    } else
+    } else {
+      // Tìm tất cả sản phẩm có id trên và xóa nó trong giỏ hàng của từng người
+      const allCartOfUsers = await User.find();
+
+      allCartOfUsers.forEach(async (user) => {
+        user.cart.items = user.cart.items.filter((item) => {
+          item.productId !== id;
+        });
+        await user.save();
+      });
+
+      // Trả kết quả trở về
       res.status(201).json({
         message: "Đã xóa thành công",
         data: {
           deletedProduct: deleProduct.deletedCount,
         },
       });
+    }
   } catch (err) {
     res.status(500).json({
       message: "Có lỗi xảy ra",
       data: {
         error: err,
+      },
+    });
+  }
+};
+
+const analyzeDataAndReport = async (req, res) => {
+  try {
+    let { startDate, endDate } = req.query;
+    console.log(startDate + " " + endDate);
+    if (startDate && !(startDate instanceof Date)) {
+      startDate = new Date(startDate + "T00:00:00.000Z");
+    }
+
+    if (endDate && !(endDate instanceof Date)) {
+      endDate = new Date(endDate + "T23:59:59.999Z");
+    }
+
+    // Truy xuất doanh thu của tất cả category
+    const categoryReport = await Product.aggregate([
+      {
+        $lookup: {
+          from: "orders",
+          let: { productId: "$id" },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    // Kiểm tra xem startDate có tồn tại không, nếu không thì luôn là true
+                    {
+                      $cond: {
+                        if: startDate,
+                        then: { $gte: ["$createdAt", startDate] },
+                        else: true,
+                      },
+                    },
+                    // Kiểm tra xem endDate có tồn tại không, nếu không thì luôn là true
+                    {
+                      $cond: {
+                        if: endDate,
+                        then: { $lte: ["$createdAt", endDate] },
+                        else: true,
+                      },
+                    },
+                    { $in: ["$$productId", "$products.productId"] }, // Điều kiện kết hợp dựa trên productId
+                  ],
+                },
+              },
+            },
+          ],
+          as: "orderDetails",
+        },
+      },
+      {
+        $unwind: {
+          path: "$orderDetails",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $group: {
+          _id: {
+            category: "$category",
+            productId: "$id",
+          },
+          totalRevenue: {
+            $sum: {
+              $reduce: {
+                input: "$orderDetails.products",
+                initialValue: 0,
+                in: {
+                  $add: [
+                    "$$value",
+                    {
+                      $cond: {
+                        if: { $eq: ["$$this.productId", "$id"] },
+                        then: {
+                          $multiply: ["$$this.price", "$$this.quantity"],
+                        },
+                        else: 0,
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+          },
+        },
+      },
+      {
+        $group: {
+          _id: "$_id.category",
+          categoryDetails: {
+            $push: {
+              productId: "$_id.productId",
+              totalRevenue: "$totalRevenue",
+            },
+          },
+          totalCategoryRevenue: { $sum: "$totalRevenue" },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          category: "$_id",
+          categoryDetails: 1,
+          totalCategoryRevenue: 1,
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          dataCategory: {
+            $push: {
+              name: "$category",
+              value: "$totalCategoryRevenue",
+            },
+          },
+          total: { $sum: "$totalCategoryRevenue" },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          dataCategory: {
+            $filter: {
+              input: "$dataCategory",
+              as: "category",
+              cond: { $gt: ["$$category.value", 0] },
+            },
+          },
+          total: 1,
+        },
+      },
+    ]);
+
+    // Truy xuất top 10 product có doanh thu cao
+    const productReport = await Order.aggregate([
+      {
+        $match: {
+          $expr: {
+            $or: [
+              {
+                $and: [
+                  { $gte: ["$createdAt", startDate] },
+                  { $lte: ["$createdAt", endDate] },
+                ],
+              },
+              {
+                $cond: {
+                  if: {
+                    $or: [
+                      { $eq: [startDate, undefined] },
+                      { $eq: [endDate, undefined] },
+                    ],
+                  },
+                  then: true,
+                  else: false,
+                },
+              },
+            ],
+          },
+        },
+      },
+      {
+        $unwind: "$products",
+      },
+      {
+        $group: {
+          _id: "$products.productId",
+          value: {
+            $sum: {
+              $multiply: ["$products.price", "$products.quantity"],
+            },
+          },
+        },
+      },
+      {
+        $sort: {
+          value: -1,
+        },
+      },
+      {
+        $limit: 10,
+      },
+      {
+        $lookup: {
+          from: "products", // Tên của bảng Product
+          localField: "_id",
+          foreignField: "id",
+          as: "productDetails",
+        },
+      },
+      {
+        $unwind: "$productDetails",
+      },
+      {
+        $project: {
+          _id: 0,
+          value: 1,
+          name: "$productDetails.name",
+        },
+      },
+    ]);
+
+    // Trả về kết quả
+    return res
+      .status(200)
+      .json({ data1: { ...categoryReport[0], dataProduct: productReport } });
+  } catch (err) {
+    res.status(500).json({
+      message: "Có lỗi xảy ra",
+      data: {
+        error: err.message,
       },
     });
   }
@@ -268,4 +496,5 @@ module.exports = {
   updateProduct,
   deleteProduct,
   searchProducts,
+  analyzeDataAndReport,
 };

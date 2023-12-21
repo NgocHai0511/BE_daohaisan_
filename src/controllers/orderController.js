@@ -1,9 +1,25 @@
 const { auto_create_id_order } = require("../config/generateId");
 const Order = require("../models/Order");
-
+const Product = require("../models/Product");
+const User = require("../models/User");
 exports.createOrder = async (req, res) => {
   const userId = req.user.id;
   const { products, status, totalPrice, paymentInfo } = req.body;
+
+  // Kiểm tra số lượng sản phẩm trong đơn hàng có đáp ứng đủ không
+  products.forEach(async (element) => {
+    const product = await Product.findOne({ id: element.productId });
+    if (!product) {
+      return res
+        .status(404)
+        .json({ message: `Không tìm thấy sản phẩm: ${product.name}` });
+    }
+    if (parseInt(product.available) < parseInt(element.quantity)) {
+      return res.status(404).json({
+        message: `Sản phẩm: ${product.name} không đủ số lượng! Hiện tại trong kho còn ${product.available}`,
+      });
+    }
+  });
   const id = await auto_create_id_order();
   const order = new Order({
     id,
@@ -16,13 +32,36 @@ exports.createOrder = async (req, res) => {
 
   order
     .save()
-    .then((user) => {
-      res
-        .status(200)
-        .json({ message: "Create Successfully", data: { newOrder: order } });
+    .then(async (result) => {
+      const user = await User.findOne({ id: userId });
+      console.log(user);
+      user.cart.items = [];
+      user
+        .save()
+        .then((success) => {
+          products.forEach(async (element) => {
+            const product = await Product.findOne({ id: element.productId });
+            if (!product) {
+              return res
+                .status(404)
+                .json({ message: `Không tìm thấy sản phẩm: ${product.name}` });
+            }
+            product.available =
+              parseInt(product.available) - parseInt(element.quantity);
+            product.available = product.available.toString();
+            await product.save();
+          });
+          return res.status(200).json({
+            message: "Create Successfully",
+            data: { newOrder: order },
+          });
+        })
+        .catch((err) =>
+          res.status(500).json({ message: "Có lỗi xảy ra", err: err.message })
+        );
     })
     .catch((err) =>
-      res.status(500).json({ message: "Có lỗi xảy ra", err: err })
+      res.status(500).json({ message: "Có lỗi xảy ra", err: err.message })
     );
 };
 
@@ -72,6 +111,45 @@ exports.updateStatusOrder = async (req, res) => {
           "Update fail! The order cannot be found. Please review and ensure that it already exists.",
       });
     }
+  } catch (err) {
+    res.status(500).json({ message: "Có lỗi xảy ra", err: err });
+  }
+};
+
+exports.analyzeDataAndReport = async (req, res) => {
+  try {
+    const listProduct = await Order.aggregate([
+      {
+        $unwind: "$products",
+      },
+      {
+        $group: {
+          _id: "$products.productId",
+          totalQuantity: { $sum: "$products.quantity" },
+          totalPrice: {
+            $sum: { $multiply: ["$products.price", "$products.quantity"] },
+          },
+        },
+      },
+      {
+        $lookup: {
+          from: "products", // Tên của collection product
+          localField: "_id",
+          foreignField: "id",
+          as: "productDetails",
+        },
+      },
+      {
+        $unwind: "$productDetails",
+      },
+      {
+        $group: {
+          _id: "$productDetails.category",
+          totalRevenue: { $sum: "$totalPrice" },
+        },
+      },
+    ]);
+    return res.status(200).json({ data: listProduct });
   } catch (err) {
     res.status(500).json({ message: "Có lỗi xảy ra", err: err });
   }
