@@ -67,10 +67,21 @@ exports.createOrder = async (req, res) => {
 
 exports.getAllOrder = async (req, res) => {
   try {
-    const orders = await Order.find();
+    let orders = await Order.find();
+    console.log(orders);
+    let ordersInfo = [];
+    let order = {};
+    for (var item of orders) {
+      order = item;
+      const user = await User.findOne({ id: item.userId });
+      let userName = user.fullname ?? "Thông tin người dùng đã bị xóa!";
+      let address = user.address ?? "Thông tin người dùng đã bị xóa!";
+      ordersInfo.push({ order, userName, address });
+      console.log(ordersInfo);
+    }
     res
       .status(200)
-      .json({ message: "Successfully!", data: { orders: orders } });
+      .json({ message: "Successfully!", data: { orders: ordersInfo } });
   } catch (err) {
     res.status(500).json({ message: "Có lỗi xảy ra", err: err });
   }

@@ -7,17 +7,18 @@ const { urlFromFireBase } = require("../config/setupfirebase.js");
 const { transporter, mailOptions } = require("../config/setUpMailer.js");
 const { randomResetCode } = require("../config/generateResetCode.js");
 
-const getAllUser = (req, res) => {
-  User.find()
-    .then((users) => {
-      res.status(200).json({
-        message: "Fetched Successfully!",
-        data: {
-          users: users,
-        },
-      });
-    })
-    .catch((err) => res.status(500).json({ err: err }));
+const getAllUser = async (req, res) => {
+  try {
+    const users = await User.find();
+    return res.status(200).json({
+      message: "Fetched Successfully!",
+      data: {
+        users: "12345",
+      },
+    });
+  } catch (err) {
+    res.status(500).json({ err: err.message });
+  }
 };
 
 const getAllCustomer = (req, res) => {
@@ -37,7 +38,7 @@ const getUser = (req, res) => {
   const id = req.params.id;
   User.find({ id: id })
     .then((user) => {
-      res.status(200).json({
+      return res.status(200).json({
         message: "Fetched Successfully!",
         data: {
           user: user,
@@ -232,11 +233,10 @@ const getCart = async (req, res) => {
         });
       }
     }
-
-    res.status(200).json({ cart });
+    return res.status(200).json({ cart });
   } catch (err) {
     console.log(err);
-    res.status(500).json({ message: "Có lỗi xảy ra", err: err.message });
+    return res.status(500).json({ message: "Có lỗi xảy ra", err: err.message });
   }
 };
 
@@ -246,6 +246,12 @@ const addProductToCart = async (req, res) => {
 
     const productId = req.body.productId;
 
+    const quantity = req.body.quantity;
+
+    if (quantity <= 0) {
+      return res.status(400).json({ message: "Quantity phải lớn hơn 0" });
+    }
+
     const user = await User.findOne({ id: userId });
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -254,17 +260,22 @@ const addProductToCart = async (req, res) => {
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
     }
+    if (parseInt(product.available) < quantity) {
+      return res.status(404).json({
+        message: `Sản phẩm: ${product.name} không đủ số lượng! Hiện tại trong kho còn ${product.available}`,
+      });
+    }
 
     const cartItem = user.cart.items.find(
       (item) => item.productId === productId
     );
     // Nếu tìm thấy sản phẩm trong giỏ hàng thì tăng số lượng lên 1
     if (cartItem) {
-      cartItem.quantity += 1;
+      cartItem.quantity += quantity;
     } else {
       user.cart.items.push({
         productId: productId,
-        quantity: 1,
+        quantity: quantity,
       });
     }
 

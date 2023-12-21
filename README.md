@@ -374,7 +374,7 @@ Các trường email,phone là duy nhất
 
 - **Yêu cầu API:** Lấy thông tin giỏ hàng của một người dùng dựa trên ID người dùng.
 - **Phương thức:** GET
-- **ENDPOINT:** `/api/user/cart`
+- **ENDPOINT:** `/api/userCartInfo`
 
 ### 18. Thêm 1 sản phẩm vào giỏ hàng của 1 user
 
@@ -384,7 +384,8 @@ Các trường email,phone là duy nhất
 - **Body:** Dữ liệu id sản phẩm.
   ```json
   {
-    "productId": "SP0003"
+    "productId": "SP0003",
+    "quantity": 2
   }
   ```
 
@@ -427,6 +428,7 @@ Các trường email,phone là duy nhất
   {
     "products": [
       {
+        "productId": "SP0006",
         "name": "Cá heo",
         "imageUrl": "img.jpg",
         "price": "100000",

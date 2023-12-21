@@ -8,7 +8,7 @@ const checkAdmin = require("../config/checkAdmin.js");
 const { upload } = require("../config/setupfirebase");
 
 // API FOR USER
-//[GET] api/users
+//[GET] api/admin/users
 router.get("/users", validateToken, checkAdmin, userController.getAllUser);
 //[GET] api/customers
 router.get(
