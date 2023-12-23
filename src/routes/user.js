@@ -61,7 +61,7 @@ router.put("/resetpass/", userController.changePassword);
 
 // API FOR ORDER
 //[GET] api/order:userId (get order by userId)
-router.get("/orders/:userId", validateToken, orderController.getOrderByUserId);
+router.get("/orders/", validateToken, orderController.getOrderByUserId);
 //[GET] api/order:id (get order by id)
 router.get("/order/:id", validateToken, orderController.getOrderById);
 //[POST] api/order

@@ -444,17 +444,17 @@ Các trường email,phone là duy nhất
   }
   ```
 
-### 22. Lấy danh sách tất cả đơn đặt hàng
+### 22. Lấy danh sách tất cả đơn đặt hàng (dành cho admin)
 
-- **Yêu cầu API:** Lấy danh sách tất cả đơn đặt hàng.
+- **Yêu cầu API:** Lấy danh sách tất cả đơn đặt hàng (admin).
 - **Phương thức:** GET
-- **ENDPOINT:** `/api/orders`
+- **ENDPOINT:** `/api/admin/orders`
 
 ### 23. Lấy thông tin đơn hàng của 1 user
 
 - **Yêu cầu API:** Lấy danh sách các đơn đặt hàng dựa trên ID người dùng.
 - **Phương thức:** GET
-- **ENDPOINT:** `/api/orders/KH0002`
+- **ENDPOINT:** `/api/orders`
 
 ### 24. Lấy thông tin đơn hàng theo id của chính nó
 

@@ -19,7 +19,6 @@ const validateToken = async (req, res, next) => {
             err: err,
           });
         }
-        console.log("111");
         req.user = decoded.user;
         next();
       });
