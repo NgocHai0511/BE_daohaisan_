@@ -6,20 +6,33 @@ exports.createOrder = async (req, res) => {
   const userId = req.user.id;
   const { products, status, totalPrice, paymentInfo } = req.body;
 
+  var flag_check_product_soldout = false;
+  var flag_check_product_notexist = false;
+
   // Kiểm tra số lượng sản phẩm trong đơn hàng có đáp ứng đủ không
-  products.forEach(async (element) => {
-    const product = await Product.findOne({ id: element.productId });
+  for (const item of products) {
+    const product = await Product.findOne({ id: item.productId });
     if (!product) {
-      return res
-        .status(404)
-        .json({ message: `Không tìm thấy sản phẩm: ${product.name}` });
+      flag_check_product_notexist = true;
+      res.status(404).json({
+        message: `Không tìm thấy sản phẩm: ${item.productId} - ${item.name}`,
+      });
+      break;
     }
-    if (parseInt(product.available) < parseInt(element.quantity)) {
-      return res.status(404).json({
+    if (parseInt(product.available) < parseInt(item.quantity)) {
+      flag_check_product_soldout = true;
+      res.status(404).json({
         message: `Sản phẩm: ${product.name} không đủ số lượng! Hiện tại trong kho còn ${product.available}`,
       });
+      break;
     }
-  });
+  }
+  if (
+    flag_check_product_soldout === true ||
+    flag_check_product_notexist === true
+  ) {
+    return;
+  }
   const id = await auto_create_id_order();
   const order = new Order({
     id,
@@ -38,31 +51,36 @@ exports.createOrder = async (req, res) => {
       user.cart.items = [];
       user
         .save()
-        .then((success) => {
-          products.forEach(async (element) => {
-            const product = await Product.findOne({ id: element.productId });
-            if (!product) {
-              return res
-                .status(404)
-                .json({ message: `Không tìm thấy sản phẩm: ${product.name}` });
-            }
-            product.available =
-              parseInt(product.available) - parseInt(element.quantity);
-            product.available = product.available.toString();
-            await product.save();
-          });
-          return res.status(200).json({
-            message: "Create Successfully",
-            data: { newOrder: order },
-          });
+        .then(async (success) => {
+          // Bắt lỗi riêng cho đoạn code bên dưới đề phòng trường hợp xấu ( ko tìm thấy do có ai xóa, sản phẩm bị người khác mua trước dẫn đến hết hàng, ... )
+          try {
+            products.forEach(async (element) => {
+              const product = await Product.findOne({ id: element.productId });
+              product.available =
+                parseInt(product.available) - parseInt(element.quantity);
+              product.available = product.available.toString();
+              await product.save();
+            });
+            return res.status(200).json({
+              message: "Create Successfully",
+              data: { newOrder: order },
+            });
+          } catch (err) {
+            console.log(err.message);
+            res
+              .status(500)
+              .json({ message: "Có lỗi xảy ra", err: err.message });
+          }
         })
-        .catch((err) =>
-          res.status(500).json({ message: "Có lỗi xảy ra", err: err.message })
-        );
+        .catch((err) => {
+          console.log(err.message);
+          res.status(500).json({ message: "Có lỗi xảy ra", err: err.message });
+        });
     })
-    .catch((err) =>
-      res.status(500).json({ message: "Có lỗi xảy ra", err: err.message })
-    );
+    .catch((err) => {
+      console.log(err.message);
+      res.status(500).json({ message: "Có lỗi xảy ra", err: err.message });
+    });
 };
 
 exports.getAllOrder = async (req, res) => {
