@@ -89,13 +89,13 @@ Ví dụ về lỗi
 
 - **Yêu cầu API:** Lấy danh sách tất cả sản phẩm.
 - **Phương thức:** GET
-- **ENDPOINT:** `/api/admin/products`
+- **ENDPOINT:** `/api/products`
 
 ### 2. Tìm kiếm sản phẩm
 
 - **Yêu cầu API:** Tìm kiếm sản phẩm theo tên hoặc từ khóa.
 - **Phương thức:** GET
-- **ENDPOINT:** `/api/admin/products/sò điệp`
+- **ENDPOINT:** `/api/products/sò điệp`
 
 ### 3. Thêm sản phẩm mới
 
