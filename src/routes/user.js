@@ -31,7 +31,7 @@ router.put(
 router.delete("/user/delete", validateToken, userController.deleteUser);
 
 // API FOR CART
-//[GET] api/user/cart
+//[GET] api/userCartInfo
 router.get("/userCartInfo", validateToken, userController.getCart);
 //[POST] api/user/addCartItem
 router.post(

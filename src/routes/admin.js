@@ -10,7 +10,7 @@ const { upload } = require("../config/setupfirebase");
 // API FOR USER
 //[GET] api/admin/users
 router.get("/users", validateToken, checkAdmin, userController.getAllUser);
-//[GET] api/customers
+//[GET] api/admin/customers
 router.get(
   "/customers",
   validateToken,
