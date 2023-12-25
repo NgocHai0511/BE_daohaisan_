@@ -246,12 +246,21 @@ const deleteProduct = async (req, res, next) => {
       // Tìm tất cả sản phẩm có id trên và xóa nó trong giỏ hàng của từng người
       const allCartOfUsers = await User.find();
 
-      allCartOfUsers.forEach(async (user) => {
-        user.cart.items = user.cart.items.filter((item) => {
-          item.productId !== id;
+      // allCartOfUsers.forEach(async (user) => {
+      //   user.cart.items = user.cart.items.filter((item) => {
+      //     return item.productId !== id;
+      //   });
+      //   await user.save();
+      // });
+
+      for (var cartUser of allCartOfUsers) {
+        cartUser.cart.items = cartUser.cart.items.filter((item) => {
+          console.log(item.productId + " - " + id);
+          return item.productId !== id;
         });
-        await user.save();
-      });
+
+        await cartUser.save();
+      }
 
       // Trả kết quả trở về
       res.status(201).json({
