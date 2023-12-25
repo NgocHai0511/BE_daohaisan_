@@ -20,15 +20,11 @@ router.get(
 
 // API FOR PRODUCT
 //GET --- api/admin/products
-router.get("/products", validateToken, productController.getAllProducts);
+router.get("/products", productController.getAllProducts);
 //GET -- api/admin/products/:searchstring
-router.get(
-  "/products/:searchstring",
-  validateToken,
-  productController.searchProducts
-);
+router.get("/products/:searchstring", productController.searchProducts);
 //GET --- api/admin/product/:id
-router.get("/product/:id", validateToken, productController.getSingleProduct);
+router.get("/product/:id", productController.getSingleProduct);
 //POST -- api/admin/product
 router.post(
   "/product",

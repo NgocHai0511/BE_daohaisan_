@@ -87,9 +87,6 @@ const searchProducts = async (req, res, next) => {
           name: { $regex: `.*${searchString}.*`, $options: "i" },
         },
         {
-          category: { $regex: `.*${searchString}.*`, $options: "i" },
-        },
-        {
           description: { $regex: `.*${searchString}.*`, $options: "i" },
         },
       ],
