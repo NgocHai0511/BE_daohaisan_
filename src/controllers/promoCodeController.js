@@ -39,6 +39,8 @@ const checkPromoCodes = async (req, res) => {
         .status(400)
         .json({ message: "Mã khuyến mãi đã hết số lần sử dụng!" });
     }
+    promoCode.available = promoCode.available - 1;
+    promoCode.save();
     return res
       .status(200)
       .json({ message: "Mã khuyến mãi hợp lệ!", promoCode: promoCode });
